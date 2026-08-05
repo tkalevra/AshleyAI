@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0a0912">
+<title>Ashley</title>
+<link rel="icon" href="/assets/favicon.svg?v=2" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/base.css?v=3">
+<link rel="stylesheet" href="/assets/login.css?v=4">
+<link rel="stylesheet" href="/assets/brand.css?v=1">
+<script src="/assets/theme.js?v=1"></script>
+</head>
+<body class="login-body">
+
+<div class="aurora" aria-hidden="true"></div>
+
+<main class="gate">
+
+  <header class="pitch">
+    <p class="eyebrow">Private &middot; on your own network</p>
+    <h1 class="wordmark">Ashley</h1>
+    <p class="stage-line"><em class="stage">pulls up a chair</em></p>
+  </header>
+
+  <!-- first run: the generated parents' password, shown until it is changed -->
+  <section id="firstrun" class="firstrun" hidden aria-labelledby="firstrun-title">
+    <h2 id="firstrun-title" class="firstrun-title">Write this down</h2>
+    <p class="firstrun-copy">
+      This is the parents' password for the settings page. It is shown here until
+      you change it, and then never again.
+    </p>
+    <div class="firstrun-row">
+      <code id="firstrun-password" class="firstrun-password"></code>
+      <button id="btn-copy-password" class="btn btn-ghost btn-compact" type="button">Copy</button>
+    </div>
+    <button id="btn-firstrun-dismiss" class="link-btn firstrun-dismiss" type="button">
+      I've written it down
+    </button>
+  </section>
+
+  <!-- the picker -->
+  <section id="picker" class="picker-wrap" aria-labelledby="picker-title">
+    <h2 id="picker-title" class="picker-title">Who's here?</h2>
+    <div id="notice" class="notice notice-error" role="alert" aria-live="polite"></div>
+    <div id="tiles" class="tiles" role="group" aria-labelledby="picker-title"></div>
+    <p id="tiles-status" class="tiles-status">Loading…</p>
+  </section>
+
+  <!-- the password step for a protected user -->
+  <section id="unlock" class="unlock" hidden aria-labelledby="unlock-name">
+    <div id="unlock-disc" class="disc disc-lg"><span id="unlock-initial" class="disc-initial"></span></div>
+    <h2 id="unlock-name" class="unlock-name"></h2>
+    <form id="unlock-form" class="unlock-form" novalidate>
+      <div id="unlock-notice" class="notice notice-error" role="alert" aria-live="polite"></div>
+      <div class="field">
+        <label for="unlock-password">Password</label>
+        <input class="input" type="password" id="unlock-password" name="password"
+               autocomplete="current-password" autocapitalize="none" spellcheck="false">
+      </div>
+      <button id="unlock-submit" class="btn btn-primary submit" type="submit">Sign in</button>
+      <button id="unlock-back" class="link-btn unlock-back" type="button">Back to everyone</button>
+    </form>
+  </section>
+
+  <!-- Quiet on purpose: this screen belongs to whoever is signing in, and
+       a child does not need a licence notice. The About page carries the
+       copyright, the licence and the source link the AGPL asks for. -->
+  <footer class="brand-credit login-credit">
+    <span class="brand-credit-line"><a href="/about">About Ashley</a></span>
+    <span class="brand-credit-sep" aria-hidden="true"></span>
+    <span class="brand-credit-line"><a href="/help">Help</a></span>
+  </footer>
+
+</main>
+
+<!-- parents' way in. Deliberately quiet: password only, no username field. -->
+<button id="btn-admin" class="admin-corner" type="button"
+        aria-haspopup="dialog" aria-expanded="false" aria-controls="admin-pop">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M14.5 9.5a3.5 3.5 0 10-3.36 3.5L9 15v2H7v2H4v-3l6.02-6.02A3.5 3.5 0 0114.5 9.5z"/>
+    <circle cx="15.5" cy="8.5" r="1.2"/>
+  </svg>
+  <span>Parents</span>
+</button>
+
+<div id="admin-scrim" class="admin-scrim" hidden></div>
+
+<section id="admin-pop" class="admin-pop" role="dialog" aria-modal="true"
+         aria-labelledby="admin-pop-title" hidden>
+  <h2 id="admin-pop-title" class="admin-pop-title">Parents' settings</h2>
+  <p class="admin-pop-copy">Enter the parents' password to manage people, prompts and the model.</p>
+  <form id="admin-form" novalidate>
+    <div id="admin-notice" class="notice notice-error" role="alert" aria-live="polite"></div>
+    <div class="field">
+      <label for="admin-password">Password</label>
+      <input class="input" type="password" id="admin-password" name="admin-password"
+             autocomplete="current-password" autocapitalize="none" spellcheck="false">
+    </div>
+    <div class="admin-pop-actions">
+      <button id="admin-cancel" class="btn btn-ghost" type="button">Cancel</button>
+      <button id="admin-submit" class="btn btn-primary" type="submit">Continue</button>
+    </div>
+  </form>
+</section>
+
+<template id="tpl-tile">
+  <button class="tile" type="button">
+    <span class="disc" data-disc><span class="disc-initial" data-initial></span></span>
+    <span class="tile-name" data-name></span>
+    <span class="tile-lock" data-lock hidden aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <rect x="5" y="10.5" width="14" height="9.5" rx="2"/>
+        <path d="M8.5 10.5V7.8a3.5 3.5 0 017 0v2.7"/>
+      </svg>
+    </span>
+  </button>
+</template>
+
+<script src="/assets/login.js?v=3"></script>
+</body>
+</html>

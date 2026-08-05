@@ -1,0 +1,56 @@
+name: Feature request
+description: Suggest something Ashley should do that it does not.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ashley is a small self-hosted app maintained in spare time, deliberately scoped to
+        one family on one LAN. Suggestions are welcome; most of them will not be built, and
+        a clear "no" is a better answer than silence.
+
+        Things that are out of scope by design: multi-tenancy, a hosted version, a database,
+        a JavaScript build step, cloud model providers as a default, and anything that makes
+        `SAFETY_CORE` editable at runtime.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: >-
+        What are you actually trying to do? Describe the situation, not the solution — the
+        problem is the part that is useful, and there is often a way to solve it that is not
+        the feature you had in mind.
+      placeholder: |
+        My two children are different ages and I keep having to check which settings each
+        one is on before I change anything.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you would like
+      description: How you imagine it working, from a parent's or a child's point of view.
+    validations:
+      required: true
+
+  - type: textarea
+    id: safety
+    attributes:
+      label: Does it touch the safety layer?
+      description: >-
+        Anything affecting prompt composition, the admin gate, `/proxy/chat`, or what a
+        child's browser can send. If you are not sure, say so — that is a fine answer and
+        the question is here to prompt the thought, not to test you.
+      placeholder: |
+        No — it is a settings-panel display change only.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: contributing
+    attributes:
+      label: Would you like to build it?
+      options:
+        - label: I would be willing to open a pull request for this.

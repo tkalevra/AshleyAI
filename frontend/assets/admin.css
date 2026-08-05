@@ -1,0 +1,905 @@
+/* Parents' settings. Same house style as the rest of Ashley, but slower and
+   plainer: this page is read carefully, not glanced at. */
+
+.admin-body {
+  min-height: 100dvh;
+}
+
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(60ch 60ch at 12% 6%, var(--aurora-a), transparent 60%),
+    radial-gradient(50ch 50ch at 92% 88%, var(--aurora-b), transparent 62%);
+  pointer-events: none;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin: 0 0 14px;
+}
+
+/* ── the gate ───────────────────────────────────────────────────── */
+
+.gate {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 22px;
+}
+
+.gate-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--slab);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 30px 28px 26px;
+  box-shadow: var(--shadow-lg);
+  animation: rise 0.4s var(--ease) both;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.gate-title {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+}
+
+.gate-copy {
+  margin: 0 0 22px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.gate-submit {
+  width: 100%;
+  padding: 13px;
+  font-size: 15px;
+  margin-top: 4px;
+}
+
+.gate-back {
+  display: block;
+  margin-top: 20px;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--dim);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--line);
+}
+
+.gate-back:hover {
+  color: var(--ember);
+  text-decoration-color: currentColor;
+}
+
+/* ── the panel ──────────────────────────────────────────────────── */
+
+.panel {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 20px calc(70px + env(safe-area-inset-bottom));
+}
+
+.admin-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 26px 0 20px;
+}
+
+.admin-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+
+.admin-mark {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 23px;
+  letter-spacing: -0.03em;
+}
+
+.admin-sub {
+  font-size: 12.5px;
+  color: var(--dim);
+}
+
+.admin-top-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.admin-top-actions .btn {
+  text-decoration: none;
+}
+
+/* ── tabs ───────────────────────────────────────────────────────── */
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--line-soft);
+  padding-bottom: 1px;
+  margin-bottom: 28px;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  position: relative;
+  padding: 11px 15px;
+  font-size: 14px;
+  color: var(--dim);
+  white-space: nowrap;
+  border-radius: var(--r-sm) var(--r-sm) 0 0;
+  transition: color 0.15s var(--ease), background 0.15s var(--ease);
+}
+
+.tab:hover {
+  color: var(--text);
+  background: var(--slab);
+}
+
+.tab[aria-selected='true'] {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.tab[aria-selected='true']::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: -1px;
+  height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: var(--accent);
+}
+
+/* ── sections ───────────────────────────────────────────────────── */
+
+.section {
+  animation: rise 0.24s var(--ease) both;
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 10px;
+}
+
+.section-copy {
+  margin: 0 0 24px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+  max-width: 56ch;
+}
+
+.rule {
+  border: none;
+  border-top: 1px solid var(--line-soft);
+  margin: 30px 0 26px;
+}
+
+.row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.hint-above {
+  margin: -3px 0 8px;
+}
+
+.textarea-tall {
+  min-height: 210px;
+  font-family: ui-monospace, 'SFMono-Regular', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.input-num {
+  width: 130px;
+}
+
+.notice strong {
+  font-weight: 700;
+}
+
+/* ── people ─────────────────────────────────────────────────────── */
+
+.users-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 26px;
+}
+
+.user-row {
+  background: var(--slab);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r);
+  overflow: hidden;
+  transition: border-color 0.15s var(--ease);
+}
+
+.user-row.open {
+  border-color: var(--line);
+}
+
+.user-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+}
+
+.user-ident {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.user-name {
+  font-size: 15px;
+  font-weight: 500;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-tag {
+  font-size: 12px;
+  color: var(--dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-move {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.user-move .icon-btn {
+  width: 30px;
+  height: 30px;
+}
+
+.user-move .icon-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.user-body {
+  padding: 4px 14px 16px;
+  border-top: 1px solid var(--line-soft);
+  margin-top: 2px;
+}
+
+.user-body .field:first-of-type {
+  margin-top: 16px;
+}
+
+.user-delete {
+  margin-left: auto;
+}
+
+.add-card {
+  background: var(--slab);
+  border: 1px dashed var(--line);
+  border-radius: var(--r);
+  padding: 20px 18px 22px;
+}
+
+.add-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+/* ── colour swatches ────────────────────────────────────────────── */
+
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* --swatch is written from JS. */
+.swatch {
+  --swatch: var(--accent);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background:
+    radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.28), transparent 58%),
+    var(--swatch);
+  box-shadow: 0 0 0 1px var(--line);
+  transition: transform 0.14s var(--ease), box-shadow 0.14s var(--ease);
+}
+
+.swatch:hover {
+  transform: scale(1.08);
+}
+
+.swatch[aria-checked='true'] {
+  box-shadow: 0 0 0 2px var(--void), 0 0 0 4px var(--swatch);
+}
+
+/* The system colour picker, for a parent who wants an exact shade. */
+.swatch-custom {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px dashed var(--line);
+  border-radius: 50%;
+  background: var(--slab-2);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.swatch-custom::-webkit-color-swatch-wrapper {
+  padding: 3px;
+}
+
+.swatch-custom::-webkit-color-swatch {
+  border: none;
+  border-radius: 50%;
+}
+
+.swatch-custom::-moz-color-swatch {
+  border: none;
+  border-radius: 50%;
+}
+
+/* ── checkbox ───────────────────────────────────────────────────── */
+
+/* Two selectors on purpose: base.css styles `.field > label` as the tiny
+   uppercase micro-label, which is MORE specific than a bare `.check` and
+   would otherwise win here. */
+.check,
+.field > .check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text);
+  cursor: pointer;
+  /* This is a real label wrapping a real checkbox, so it must not inherit the
+     uppercase micro-label treatment from .field > label. */
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 400;
+  margin-bottom: 0;
+}
+
+.check input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* ── model test result ──────────────────────────────────────────── */
+
+.test-result {
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  background: var(--slab);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.test-result.good {
+  border-color: var(--ok-line);
+  background: var(--ok-tint);
+}
+
+.test-result.bad {
+  border-color: var(--danger-line);
+  background: var(--danger-tint);
+  color: var(--danger-text);
+}
+
+.test-title {
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+
+.model-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-height: 190px;
+  overflow-y: auto;
+  font-family: ui-monospace, 'SFMono-Regular', 'Consolas', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+/* ── theme picker ───────────────────────────────────────────────── */
+
+.theme-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+}
+
+.theme-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  padding: 11px 13px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line-soft);
+  background: var(--slab);
+  transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
+}
+
+.theme-card:hover {
+  border-color: var(--line);
+}
+
+.theme-card[aria-checked='true'] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.theme-swatch {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.theme-swatch-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+}
+
+/* The one place that must render a theme the page is not wearing. */
+.theme-swatch[data-theme-id='dark']   { background: var(--preview-dark-bg); }
+.theme-swatch[data-theme-id='ivory']  { background: var(--preview-ivory-bg); }
+.theme-swatch[data-theme-id='blood']  { background: var(--preview-blood-bg); }
+.theme-swatch[data-theme-id='blue']   { background: var(--preview-blue-bg); }
+.theme-swatch[data-theme-id='forest'] { background: var(--preview-forest-bg); }
+
+.theme-swatch[data-theme-id='dark']   .theme-swatch-dot { background: var(--preview-dark-dot); }
+.theme-swatch[data-theme-id='ivory']  .theme-swatch-dot { background: var(--preview-ivory-dot); }
+.theme-swatch[data-theme-id='blood']  .theme-swatch-dot { background: var(--preview-blood-dot); }
+.theme-swatch[data-theme-id='blue']   .theme-swatch-dot { background: var(--preview-blue-dot); }
+.theme-swatch[data-theme-id='forest'] .theme-swatch-dot { background: var(--preview-forest-dot); }
+
+.theme-card-text {
+  min-width: 0;
+}
+
+.theme-card-name {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.theme-card-blurb {
+  display: block;
+  font-size: 11.5px;
+  color: var(--dim);
+  margin-top: 2px;
+}
+
+/* ── age band + latitude tags ───────────────────────────────────
+   These carry the one thing a parent must be able to see without opening
+   anything: which rules somebody is on. Age band is stated plainly; the
+   latitude is the one that changes colour, because that is the difference
+   between two people of the same age. */
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.chip {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  padding: 3px 9px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--line);
+  background: var(--slab-2);
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.chip-age {
+  border-color: var(--line);
+  background: var(--slab-3);
+  color: var(--text);
+}
+
+/* Protective: the calm one. */
+.chip-tight {
+  border-color: var(--ok-line);
+  background: var(--ok-tint);
+  color: var(--ok-text);
+}
+
+/* Relaxed tone: warm, so it stands out from its restrictive twin at a
+   glance. It is not a warning — it is still child-safe. */
+.chip-loose {
+  border-color: var(--ember-line);
+  background: var(--ember-tint);
+  color: var(--ember);
+}
+
+.chip-unknown {
+  border-style: dashed;
+  color: var(--dim);
+  background: none;
+}
+
+/* ── rules: choosing whose ──────────────────────────────────────── */
+
+.pick-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.pick-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  padding: 11px 13px;
+  border-radius: var(--r);
+  border: 1px solid var(--line-soft);
+  background: var(--slab);
+  transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
+}
+
+.pick-row:hover {
+  border-color: var(--line);
+  background: var(--slab-2);
+}
+
+.pick-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.pick-name {
+  font-size: 15px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pick-sub {
+  font-size: 12px;
+  color: var(--dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── rules: one person ──────────────────────────────────────────── */
+
+.rules-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 20px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.rules-ident {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.rules-name {
+  font-family: var(--display);
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.sub-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.sub-copy {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.6;
+  max-width: 56ch;
+}
+
+/* ── the four templates ─────────────────────────────────────────── */
+
+.preset-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 9px;
+}
+
+.preset-card {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  text-align: left;
+  padding: 14px 15px;
+  border-radius: var(--r);
+  border: 1px solid var(--line-soft);
+  background: var(--slab);
+  transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
+}
+
+.preset-card:hover {
+  border-color: var(--line);
+}
+
+.preset-card[aria-checked='true'] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.preset-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.preset-card-label {
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.preset-card-desc {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* ── the two editable boxes ─────────────────────────────────────── */
+
+.editor {
+  margin-bottom: 26px;
+}
+
+.editor-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 7px;
+}
+
+/* Not inside .field, so it needs the micro-label treatment spelled out. */
+.editor-head label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin: 0;
+}
+
+/* "Using the template" / "Customised" / "Not saved yet" — small, but it is
+   the state of the box and it must never be ambiguous. */
+.state-chip {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  padding: 3px 10px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--line);
+  background: var(--slab-2);
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.state-template {
+  border-color: var(--line);
+  background: var(--slab-2);
+  color: var(--dim);
+}
+
+.state-custom {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+.state-dirty {
+  border-color: var(--ember-line);
+  background: var(--ember-tint);
+  color: var(--ember);
+}
+
+.state-locked {
+  border-style: dashed;
+  border-color: var(--line);
+  background: none;
+  color: var(--dim);
+}
+
+/* ── the rules that cannot be changed here ──────────────────────── */
+
+/* Deliberately unlike every editable box on this page: no input border, no
+   input background, dashed edge, and text that reads as a printed notice
+   rather than something waiting to be typed in. */
+.core {
+  margin-top: 34px;
+  padding: 18px 18px 20px;
+  border: 1px dashed var(--line);
+  border-radius: var(--r);
+  background: var(--slab);
+}
+
+.core-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.core-title {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.core-copy {
+  margin: 0 0 14px;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--muted);
+  max-width: 60ch;
+}
+
+.core-text {
+  margin: 0;
+  padding: 14px 15px;
+  border-radius: var(--r-sm);
+  background: var(--slab-2);
+  border: 1px solid var(--line-soft);
+  color: var(--dim);
+  font-family: ui-monospace, 'SFMono-Regular', 'Consolas', monospace;
+  font-size: 12.5px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+/* ── narrow screens ─────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .panel {
+    padding: 0 14px calc(60px + env(safe-area-inset-bottom));
+  }
+
+  .admin-top {
+    padding: 18px 0 14px;
+  }
+
+  .tabs {
+    margin-bottom: 22px;
+  }
+
+  .section-title {
+    font-size: 20px;
+  }
+
+  .user-head {
+    flex-wrap: wrap;
+    gap: 9px;
+  }
+
+  /* The tags drop to their own line rather than squeezing the name — they
+     are the thing being read, so they must not truncate. */
+  .user-head .chips,
+  .pick-row .chips {
+    flex-basis: 100%;
+    order: 5;
+  }
+
+  .row-actions .btn {
+    flex: 1;
+    min-width: 130px;
+  }
+
+  .user-delete {
+    margin-left: 0;
+  }
+
+  .pick-row {
+    flex-wrap: wrap;
+  }
+
+  .rules-head {
+    gap: 10px;
+  }
+
+  .preset-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .core {
+    padding: 15px 14px 16px;
+  }
+
+  .core-text {
+    padding: 12px;
+    max-height: 260px;
+  }
+}

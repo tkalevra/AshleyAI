@@ -1,0 +1,110 @@
+name: ashley
+
+services:
+  ashley-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: ashley-backend:latest
+    container_name: ashley-backend
+    restart: unless-stopped
+    # LAN only. Reached directly on :8181 and through nginx-proxy-manager at
+    # a hostname of your choosing. Keep it off the public internet.
+    # The proxy terminates TLS, so ASHLEY_TRUSTED_ORIGINS below must list the
+    # https origin or every POST is refused by the same-origin gate.
+    ports:
+      - "8181:5000"
+    # Non-root, matching the host `admin` account that owns the data dirs.
+    user: "950:950"
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    environment:
+      - ASHLEY_PIPELINE_URL=http://ashley-pipeline:9099/v1/chat/completions
+      - ASHLEY_PIPELINE_KEY=${ASHLEY_PIPELINE_KEY:?set in .env}
+      - ASHLEY_PIPELINE_TIMEOUT=180
+      # Session signing/identity. Must be stable across restarts, or everyone
+      # gets logged out on every `compose up`.
+      - ASHLEY_SECRET_KEY=${ASHLEY_SECRET_KEY:?set in .env}
+      - ASHLEY_ADMIN_USER=${ASHLEY_ADMIN_USER:-ashley}
+      # Parents' admin-panel password. Authoritative when set: the backend
+      # re-hashes it into /data/auth/admin.json on every boot, so editing .env
+      # and restarting IS the password reset path.
+      - ASHLEY_ADMIN_PASSWORD=${ASHLEY_ADMIN_PASSWORD:-}
+      # display_name of the user created on first boot, when users.json is absent.
+      - ASHLEY_DEFAULT_USER=${ASHLEY_DEFAULT_USER:-Alex}
+      # Safety preset the first account starts on. Deliberately defaults to
+      # the most protective one: an unconfigured install must never be the
+      # loosest one.
+      - ASHLEY_DEFAULT_PRESET=${ASHLEY_DEFAULT_PRESET:-child_8_12_restrictive}
+      # The backend SEEDS /data/config/config.json from these on first boot, so
+      # it needs the same LLM values the pipeline has. Without them it seeded an
+      # empty model + empty key, the pipeline preferred that config over its own
+      # env, and every chat came back 401 Invalid API Key. After the first seed
+      # the admin panel owns these values -- this is only the seed source.
+      - ASHLEY_LLM_URL=${ASHLEY_LLM_URL:?set in .env}
+      - ASHLEY_LLM_MODEL=${ASHLEY_LLM_MODEL:?set in .env}
+      - ASHLEY_LLM_API_KEY=${ASHLEY_LLM_API_KEY:?set in .env}
+      - ASHLEY_LLM_TIMEOUT=180
+      # HTTP on the LAN today. Flip to 1 the day this gets TLS.
+      - ASHLEY_COOKIE_SECURE=${ASHLEY_COOKIE_SECURE:-0}
+      # ASHLEY_AUTH_REQUIRED is retired. Login is no longer a global on/off:
+      # each user in /data/auth/users.json carries its own password_protected
+      # flag, managed from the admin panel (Users section).
+      - ASHLEY_TRUSTED_ORIGINS=${ASHLEY_TRUSTED_ORIGINS:-}
+      - ASHLEY_SESSION_DAYS=30
+      - ASHLEY_MAX_UPLOAD_MB=8
+    volumes:
+      # Persistent data, host-owned so it survives rebuilds. ASHLEY_DATA_DIR is
+      # set in .env; it defaults to ./data for a local checkout.
+      - ${ASHLEY_DATA_DIR:-./data}/characters:/data/characters
+      - ${ASHLEY_DATA_DIR:-./data}/chats:/data/chats
+      - ${ASHLEY_DATA_DIR:-./data}/uploads:/data/uploads
+      # password hash + server-side sessions (chmod 700, host-owned)
+      - ${ASHLEY_DATA_DIR:-./data}/auth:/data/auth
+      # admin-editable prompts + model settings. The backend is the WRITER
+      # (atomic replace); the pipeline mounts the same dir read-only.
+      - ${ASHLEY_DATA_DIR:-./data}/config:/data/config
+      # frontend served read-only
+      - ./frontend:/app/static:ro
+    depends_on:
+      - ashley-pipeline
+    networks:
+      - ashley-net
+
+  ashley-pipeline:
+    image: ghcr.io/open-webui/pipelines:main
+    container_name: ashley-pipeline
+    restart: unless-stopped
+    # Bound to loopback, not the LAN: only ashley-backend needs it, and it
+    # reaches the container over ashley-net by service name. The published port
+    # is kept for host-local debugging only. Do not expose it.
+    ports:
+      - "127.0.0.1:9098:9099"
+    environment:
+      - PIPELINES_DIR=/app/pipelines
+      - PIPELINES_API_KEY=${ASHLEY_PIPELINE_KEY:?set in .env}
+      # Any OpenAI-compatible endpoint (llama.cpp llama-server, Ollama, ...).
+      - ASHLEY_LLM_URL=${ASHLEY_LLM_URL:?set in .env}
+      - ASHLEY_LLM_MODEL=${ASHLEY_LLM_MODEL:?set in .env}
+      - ASHLEY_LLM_API_KEY=${ASHLEY_LLM_API_KEY:?set in .env}
+      - ASHLEY_LLM_TIMEOUT=180
+    volumes:
+      - ${ASHLEY_DATA_DIR:-./data}/pipeline:/app/pipelines
+      # Same dir the backend writes at /data/config, mounted READ-ONLY here.
+      # The pipeline re-reads config.json on mtime change for the prompts and
+      # the model endpoint; the env vars above stay as the fallback rung.
+      - ${ASHLEY_DATA_DIR:-./data}/config:/app/config:ro
+    networks:
+      - ashley-net
+
+networks:
+  ashley-net:
+    name: ashley-net
+    driver: bridge
+    ipam:
+      config:
+        # A /24 is ample for two containers. Change it if it collides with
+        # something else on your host.
+        - subnet: 172.16.24.0/24

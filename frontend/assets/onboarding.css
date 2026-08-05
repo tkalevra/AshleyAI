@@ -1,0 +1,570 @@
+/* ── setup checklist + guided tour ───────────────────────────────────
+   Two surfaces that sit on top of the parents' settings. They share this
+   file because they share a voice: quiet, plain, and never in the way of
+   the panel underneath.
+
+   Every colour resolves through a base.css token, so all five themes
+   (dark / ivory / blood / blue / forest) are covered by construction.
+   The two positioned things — the spotlight and its card — are placed by
+   custom properties written from JS, never by a style attribute, because
+   the CSP has no 'unsafe-inline'.
+   ------------------------------------------------------------------ */
+
+
+/* ══ the checklist ═════════════════════════════════════════════════ */
+
+.setup {
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--slab);
+  margin: 0 0 22px;
+  overflow: hidden;
+}
+
+/* Done with everything: still there, just no longer asking for attention. */
+.setup.is-complete {
+  border-color: var(--line-soft);
+  background: none;
+}
+
+.setup-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  padding: 13px 15px;
+  color: var(--text);
+}
+
+.setup-toggle:hover {
+  background: var(--slab-2);
+}
+
+.setup-chevron {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  color: var(--dim);
+  transition: transform 0.16s var(--ease);
+}
+
+.setup-chevron svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.setup.is-collapsed .setup-chevron {
+  transform: rotate(-90deg);
+}
+
+.setup-titles {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.setup-title {
+  font-family: var(--display);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.setup-count {
+  font-size: 12px;
+  color: var(--dim);
+}
+
+/* --fill is written from JS as a percentage. */
+.setup-meter {
+  --fill: 0%;
+  position: relative;
+  flex-shrink: 0;
+  width: 74px;
+  height: 5px;
+  border-radius: var(--r-full);
+  background: var(--slab-3);
+  overflow: hidden;
+}
+
+.setup-meter-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--fill);
+  border-radius: var(--r-full);
+  background: var(--accent);
+  transition: width 0.24s var(--ease);
+}
+
+.setup.is-complete .setup-meter-fill {
+  background: var(--ok);
+}
+
+.setup-body {
+  padding: 2px 15px 16px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.setup-intro {
+  margin: 14px 0 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 62ch;
+}
+
+/* ── the six steps ─────────────────────────────────────────────── */
+
+.setup-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.setup-step {
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-sm);
+  background: var(--void);
+  overflow: hidden;
+}
+
+.setup-step.is-done {
+  border-color: var(--line-soft);
+  background: none;
+}
+
+.setup-step-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  width: 100%;
+  text-align: left;
+  padding: 11px 13px;
+  color: var(--text);
+}
+
+.setup-step-head:hover {
+  background: var(--slab-2);
+}
+
+/* The tick is decoration; the words in the state chip carry the meaning,
+   so a screen reader is never relying on a shape. */
+.setup-tick {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  display: grid;
+  place-items: center;
+  color: var(--void);
+  transition: background 0.16s var(--ease), border-color 0.16s var(--ease);
+}
+
+.setup-tick svg {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+}
+
+.setup-step.is-done .setup-tick {
+  background: var(--ok);
+  border-color: var(--ok);
+}
+
+.setup-step.is-done .setup-tick svg {
+  opacity: 1;
+}
+
+.setup-step.is-warn .setup-tick {
+  border-color: var(--ember-line);
+}
+
+.setup-step-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.setup-step-title {
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.setup-step-lead {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.setup-step-summary {
+  font-size: 12px;
+  color: var(--dim);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.setup-step.is-warn .setup-step-summary {
+  color: var(--ember);
+}
+
+.setup-step-body {
+  padding: 2px 13px 15px 44px;
+}
+
+.setup-p {
+  margin: 0 0 10px;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--muted);
+  max-width: 62ch;
+}
+
+.setup-why {
+  color: var(--dim);
+  font-size: 12.5px;
+}
+
+.setup-muted {
+  color: var(--dim);
+  font-size: 12.5px;
+}
+
+.setup-sub {
+  color: var(--text);
+  font-weight: 600;
+  margin-top: 16px;
+}
+
+/* "how this step decides it is done" — set apart from the body copy so it
+   reads as a note about the mechanism rather than more instructions. */
+.setup-basis {
+  margin: 14px 0 0;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line-soft);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--dim);
+  max-width: 62ch;
+}
+
+.setup-fact-label {
+  color: var(--dim);
+}
+
+.setup-fact-value {
+  color: var(--text);
+  font-family: ui-monospace, 'SFMono-Regular', 'Consolas', monospace;
+  font-size: 12.5px;
+  overflow-wrap: anywhere;
+}
+
+.setup-result {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.setup-result.bad {
+  border-color: var(--danger-line);
+  background: var(--danger-tint);
+  color: var(--danger-text);
+}
+
+/* ── the honesty note ──────────────────────────────────────────── */
+
+.setup-honesty {
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  max-width: 62ch;
+}
+
+.setup-honesty li {
+  padding-left: 13px;
+  border-left: 2px solid var(--ember-line);
+  font-size: 13.5px;
+  line-height: 1.65;
+}
+
+.setup-honesty-h {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.setup-honesty-p {
+  color: var(--muted);
+}
+
+/* ── people inside a step ──────────────────────────────────────── */
+
+.setup-people {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.setup-person {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 9px 11px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line-soft);
+  background: var(--slab);
+}
+
+.setup-person .disc-sm {
+  width: 32px;
+  height: 32px;
+}
+
+.setup-person .disc-sm .disc-initial {
+  font-size: 14px;
+}
+
+.setup-person-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.setup-person-name {
+  font-size: 14px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.setup-person-sub {
+  font-size: 12px;
+  color: var(--dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.setup-person-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* ── the header controls ───────────────────────────────────────── */
+
+.admin-help {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.help-btn {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 15px;
+  line-height: 1;
+  text-decoration: none;
+  transition: color 0.15s var(--ease), border-color 0.15s var(--ease),
+    background 0.15s var(--ease);
+}
+
+.help-btn:hover {
+  color: var(--text);
+  border-color: var(--dim);
+  background: var(--slab);
+}
+
+
+/* ══ the tour ══════════════════════════════════════════════════════ */
+
+.tour {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+}
+
+/* Catches clicks anywhere outside the card and ends the tour. It sits
+   below the spotlight and the card, and is deliberately transparent —
+   the dimming is the spotlight's ring, so the hole stays clear. */
+.tour-scrim {
+  position: absolute;
+  inset: 0;
+}
+
+/* --x/--y/--w/--h are written from JS. The dimming is a very large ring
+   around the hole, which is why the page behind stays visible inside it
+   and nowhere else. */
+.tour-spot {
+  --x: 0px;
+  --y: 0px;
+  --w: 0px;
+  --h: 0px;
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  height: var(--h);
+  border-radius: var(--r);
+  border: 2px solid var(--ember);
+  box-shadow: 0 0 0 9999px var(--scrim);
+  pointer-events: none;
+  transition: left 0.22s var(--ease), top 0.22s var(--ease),
+    width 0.22s var(--ease), height 0.22s var(--ease);
+}
+
+/* --px/--py are written from JS. */
+.tour-pop {
+  --px: 0px;
+  --py: 0px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(var(--px), var(--py));
+  width: min(340px, calc(100vw - 24px));
+  padding: 16px 17px 14px;
+  border-radius: var(--r);
+  border: 1px solid var(--line);
+  background: var(--slab);
+  box-shadow: var(--shadow-lg);
+  transition: transform 0.22s var(--ease);
+}
+
+.tour-where {
+  margin: 0 0 6px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.tour-title {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+}
+
+.tour-copy {
+  margin: 0 0 14px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.tour-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tour-count {
+  font-size: 12px;
+  color: var(--dim);
+}
+
+.tour-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.tour-hint {
+  margin: 10px 0 0;
+  font-size: 11.5px;
+  color: var(--dim);
+}
+
+
+/* ══ narrow screens ════════════════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .setup-body {
+    padding: 2px 12px 14px;
+  }
+
+  .setup-step-body {
+    padding-left: 13px;
+  }
+
+  .setup-meter {
+    display: none;
+  }
+
+  .setup-person-actions {
+    flex-basis: 100%;
+  }
+
+  .setup-person-actions .btn {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  /* The card stops chasing the target and sits at the bottom of the
+     screen, where a thumb is. The spotlight still moves. */
+  .tour-pop {
+    left: 12px;
+    right: 12px;
+    top: auto;
+    bottom: calc(14px + env(safe-area-inset-bottom));
+    width: auto;
+    transform: none;
+  }
+}
+
+
+/* ══ motion ════════════════════════════════════════════════════════
+   base.css already collapses every transition under this preference;
+   spelled out here because a spotlight sliding across the screen is the
+   single most likely thing on this page to cause trouble, and it must
+   move instantly rather than nearly instantly. */
+
+@media (prefers-reduced-motion: reduce) {
+  .tour-spot,
+  .tour-pop,
+  .setup-meter-fill,
+  .setup-chevron,
+  .setup-tick {
+    transition: none;
+  }
+}

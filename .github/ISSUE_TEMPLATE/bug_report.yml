@@ -1,0 +1,94 @@
+name: Bug report
+description: Something does not work the way the documentation says it does.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Stop if this is a security vulnerability or a safety bypass** — a way to get a
+        model past `SAFETY_CORE`. Those go through private disclosure, not here. See
+        [SECURITY.md](https://github.com/tkalevra/AshleyAI/blob/master/SECURITY.md).
+
+        **Do not paste a child's conversation.** Paraphrase, or redact it to the shortest
+        thing that still reproduces the problem. No real names, no real hostnames or LAN
+        IPs, no API keys.
+
+  - type: checkboxes
+    id: not-security
+    attributes:
+      label: Confirm
+      options:
+        - label: This is not a security vulnerability or a safety bypass.
+          required: true
+        - label: I have removed personal information, hostnames, and keys from what I am pasting.
+          required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead.
+      placeholder: |
+        I saved a preset override for a user in the settings panel. I expected the next
+        message to use it. The reply read as though the template was still in effect.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Numbered, from a clean start if you can get there.
+      placeholder: |
+        1. Sign in to /admin
+        2. People → pick a user → Prompts
+        3. …
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part
+      options:
+        - Login / user picker
+        - Chat / characters
+        - Settings panel (admin)
+        - Presets and prompts
+        - Deployment / Docker / config
+        - Documentation
+        - Not sure
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Commit sha or release tag. `git rev-parse --short HEAD`
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: >-
+        Host OS, Docker version, and which model endpoint and model you are using. Model
+        behaviour varies a lot, so this matters more than it looks.
+      placeholder: |
+        Host: Debian 12, Docker 27.3
+        Endpoint: llama.cpp llama-server
+        Model: <model id>
+        Browser: Firefox 141
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: >-
+        `docker compose logs ashley-backend` and `ashley-pipeline`. Conversation content is
+        never logged, so these are safe to paste — but check for hostnames and keys anyway.
+      render: text

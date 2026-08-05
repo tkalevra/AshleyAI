@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0a0912">
+<title>Ashley — settings</title>
+<link rel="icon" href="/assets/favicon.svg?v=2" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/base.css?v=3">
+<link rel="stylesheet" href="/assets/admin.css?v=2">
+<link rel="stylesheet" href="/assets/onboarding.css?v=1">
+<link rel="stylesheet" href="/assets/brand.css?v=1">
+<script src="/assets/theme.js?v=1"></script>
+</head>
+<body class="admin-body">
+
+<div class="aurora" aria-hidden="true"></div>
+
+<!-- ── the gate: shown whenever the settings API says we are not signed in ── -->
+<main id="gate" class="gate" hidden>
+  <div class="gate-card">
+    <p class="eyebrow">Ashley</p>
+    <h1 class="gate-title">Parents' settings</h1>
+    <p class="gate-copy">
+      This is where you add people, set passwords, and change how Ashley behaves.
+      Enter the parents' password to continue.
+    </p>
+
+    <form id="gate-form" novalidate>
+      <div id="gate-notice" class="notice notice-error" role="alert" aria-live="polite"></div>
+      <div class="field">
+        <label for="gate-password">Password</label>
+        <input class="input" type="password" id="gate-password" name="password"
+               autocomplete="current-password" autocapitalize="none" spellcheck="false">
+      </div>
+      <button id="gate-submit" class="btn btn-primary gate-submit" type="submit">Continue</button>
+    </form>
+
+    <a class="gate-back" href="/">Back to Ashley</a>
+  </div>
+</main>
+
+<!-- ── the panel ─────────────────────────────────────────────────── -->
+<div id="panel" class="panel" hidden>
+
+  <header class="admin-top">
+    <div class="admin-brand">
+      <span class="admin-mark">Ashley</span>
+      <span class="admin-sub">Parents' settings</span>
+    </div>
+    <div class="admin-top-actions">
+      <div class="admin-help">
+        <button id="btn-tour" class="help-btn" type="button"
+                aria-label="Show me around these settings" title="Show me around these settings">?</button>
+        <a class="help-btn" href="/help" aria-label="Help" title="Help">i</a>
+      </div>
+      <a class="btn btn-ghost btn-compact" href="/">Back to Ashley</a>
+      <button id="btn-admin-logout" class="btn btn-ghost btn-compact" type="button">Sign out</button>
+    </div>
+  </header>
+
+  <!-- ── setup checklist ────────────────────────────────────────────
+       Built by assets/onboarding.js. Sits above the sections on purpose:
+       each step sends the parent into one of them, and the list has to
+       still be there when they arrive. -->
+  <section id="setup-card" class="setup" aria-labelledby="setup-title" hidden>
+    <button id="setup-toggle" class="setup-toggle" type="button"
+            aria-expanded="true" aria-controls="setup-body">
+      <span class="setup-chevron" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      </span>
+      <span class="setup-titles">
+        <span class="setup-title" id="setup-title">Setting up</span>
+        <span class="setup-count" id="setup-count"></span>
+      </span>
+      <span class="setup-meter" aria-hidden="true">
+        <span class="setup-meter-fill" id="setup-meter"></span>
+      </span>
+    </button>
+
+    <div id="setup-body" class="setup-body">
+      <p class="setup-intro">
+        Six things worth doing once. Nothing here ticks because you pressed
+        a button: some steps tick when Ashley can see for itself that they
+        are done, and the rest tick on your say-so, which those steps tell
+        you plainly. Come back whenever you add somebody or move the model.
+      </p>
+
+      <ol id="setup-steps" class="setup-steps"></ol>
+
+      <div class="row-actions">
+        <button id="setup-recheck" class="btn btn-ghost btn-compact" type="button">
+          Check again
+        </button>
+        <button id="setup-restart" class="btn btn-ghost btn-compact" type="button">
+          Start again
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <nav class="tabs" role="tablist" aria-label="Settings sections">
+    <button class="tab" type="button" role="tab" id="tab-users"
+            aria-controls="sec-users" aria-selected="true" data-tab="users">People</button>
+    <button class="tab" type="button" role="tab" id="tab-prompts"
+            aria-controls="sec-prompts" aria-selected="false" data-tab="prompts">Rules</button>
+    <button class="tab" type="button" role="tab" id="tab-model"
+            aria-controls="sec-model" aria-selected="false" data-tab="model">Model</button>
+    <button class="tab" type="button" role="tab" id="tab-appearance"
+            aria-controls="sec-appearance" aria-selected="false" data-tab="appearance">Appearance</button>
+    <button class="tab" type="button" role="tab" id="tab-password"
+            aria-controls="sec-password" aria-selected="false" data-tab="password">Password</button>
+  </nav>
+
+  <main class="admin-main">
+
+    <!-- ── people ─────────────────────────────────────────────── -->
+    <section id="sec-users" class="section" role="tabpanel" aria-labelledby="tab-users">
+      <h2 class="section-title">People</h2>
+      <p class="section-copy">
+        Everyone here gets their own face on the sign-in screen, their own
+        private conversations, and their own set of rules. Characters are
+        shared by the whole family. The two tags on each row show which
+        rules that person is on.
+      </p>
+
+      <div id="users-notice" class="notice notice-error" role="alert" aria-live="polite"></div>
+      <div id="users-list" class="users-list"></div>
+
+      <div class="add-card">
+        <h3 class="add-title">Add someone</h3>
+        <div id="add-notice" class="notice notice-error" role="alert" aria-live="polite"></div>
+
+        <div class="field">
+          <label for="add-name">Their name</label>
+          <input class="input" type="text" id="add-name" maxlength="32" placeholder="Their name">
+        </div>
+
+        <div class="field">
+          <label for="add-preset">Which rules they start on</label>
+          <select class="select" id="add-preset"></select>
+          <p class="hint" id="add-preset-hint"></p>
+        </div>
+
+        <div class="field">
+          <span class="field-label">Their colour</span>
+          <div id="add-swatches" class="swatches" role="radiogroup" aria-label="Their colour"></div>
+        </div>
+
+        <div class="field">
+          <label class="check">
+            <input type="checkbox" id="add-protected">
+            <span>Ask for a password when they sign in</span>
+          </label>
+        </div>
+
+        <div class="field" id="add-password-field" hidden>
+          <label for="add-password">Their password</label>
+          <input class="input" type="password" id="add-password" autocomplete="new-password">
+          <p class="hint">They will type this on the sign-in screen.</p>
+        </div>
+
+        <button id="btn-add-user" class="btn btn-primary" type="button">Add them</button>
+      </div>
+    </section>
+
+    <!-- ── rules / prompts, one person at a time ──────────────── -->
+    <section id="sec-prompts" class="section" role="tabpanel" aria-labelledby="tab-prompts" hidden>
+      <h2 class="section-title">Rules Ashley follows</h2>
+      <p class="section-copy">
+        Everyone has their own rules. You start from one of four ready-made
+        templates — two for younger children, two for teenagers — and you can
+        rewrite either box for that person alone. The rules are sent to the
+        model with every message, before anything anyone types.
+      </p>
+
+      <div id="rules-notice" class="notice" role="alert" aria-live="polite"></div>
+
+      <!-- who -->
+      <div id="rules-picker">
+        <span class="field-label" id="rules-picker-label">Whose rules would you like to see?</span>
+        <div id="rules-picker-list" class="pick-list" aria-labelledby="rules-picker-label"></div>
+
+        <hr class="rule">
+        <p class="hint">
+          The four templates are Ashley's own wording. If you have edited them
+          in the past and want the originals back, this puts every template back
+          to the text Ashley shipped with. It does not touch anything you have
+          written for one person.
+        </p>
+        <button id="btn-reset-templates" class="btn btn-ghost" type="button">
+          Restore the four templates
+        </button>
+      </div>
+
+      <!-- one person -->
+      <div id="rules-detail" hidden>
+
+        <div class="rules-head">
+          <button id="btn-rules-back" class="btn btn-ghost btn-compact" type="button">
+            All people
+          </button>
+          <span class="disc disc-sm" id="rules-disc"><span class="disc-initial" id="rules-initial"></span></span>
+          <span class="rules-ident">
+            <span class="rules-name" id="rules-name"></span>
+            <span class="chips" id="rules-chips"></span>
+          </span>
+        </div>
+
+        <h3 class="sub-title" id="preset-label">Their template</h3>
+        <p class="sub-copy">
+          Pick the one that fits their age and how much room you want the
+          characters to have. Everything below starts from this.
+        </p>
+        <div id="preset-cards" class="preset-cards" role="radiogroup" aria-labelledby="preset-label"></div>
+        <p class="hint">
+          A box you have rewritten keeps your wording and ignores the template
+          until you reset it.
+        </p>
+
+        <hr class="rule">
+
+        <!-- editor: how the character behaves -->
+        <div class="editor">
+          <div class="editor-head">
+            <label for="rules-guardrail">How characters should behave</label>
+            <span class="state-chip" id="rules-guardrail-state"></span>
+          </div>
+          <p class="hint hint-above">
+            Tone, style, how a character stays in character, and what they do
+            with awkward subjects. Safe to experiment with.
+          </p>
+          <div class="notice notice-error" id="rules-guardrail-notice" role="alert" aria-live="polite"></div>
+          <textarea class="textarea textarea-tall" id="rules-guardrail" spellcheck="false"
+                    aria-describedby="rules-guardrail-state"></textarea>
+          <div class="row-actions">
+            <button class="btn btn-primary" id="btn-save-guardrail" type="button">Save</button>
+            <button class="btn btn-ghost" id="btn-reset-guardrail" type="button">Reset to template</button>
+          </div>
+        </div>
+
+        <div class="notice notice-warn show" role="note">
+          <span>
+            <strong>The safety rules below are the child-safety layer.</strong>
+            They come after the character, so they have the last word. Weakening
+            or emptying this box is what lets unsafe replies through. If you are
+            unsure, press "Reset to template" — that puts back the wording this
+            person's template came with.
+          </span>
+        </div>
+
+        <!-- editor: safety rules -->
+        <div class="editor">
+          <div class="editor-head">
+            <label for="rules-floor">Safety rules</label>
+            <span class="state-chip" id="rules-floor-state"></span>
+          </div>
+          <div class="notice notice-error" id="rules-floor-notice" role="alert" aria-live="polite"></div>
+          <textarea class="textarea textarea-tall" id="rules-floor" spellcheck="false"
+                    aria-describedby="rules-floor-state"></textarea>
+          <div class="row-actions">
+            <button class="btn btn-primary" id="btn-save-floor" type="button">Save</button>
+            <button class="btn btn-ghost" id="btn-reset-floor" type="button">Reset to template</button>
+          </div>
+        </div>
+
+        <div class="row-actions">
+          <button class="btn btn-ghost" id="btn-reset-both" type="button">
+            Put both boxes back to the template
+          </button>
+        </div>
+
+        <!-- the part nobody can switch off -->
+        <section class="core" aria-labelledby="core-title">
+          <div class="core-head">
+            <h3 class="core-title" id="core-title">Rules that are always on</h3>
+            <span class="state-chip state-locked">Cannot be changed here</span>
+          </div>
+          <p class="core-copy">
+            These apply to every person and every template, whatever you write
+            above, and they are added last so they always have the final word.
+            They are deliberately not editable from this page — changing them
+            means editing Ashley's source code.
+          </p>
+          <pre class="core-text" id="rules-core" tabindex="0" role="region"
+               aria-label="The rules that are always on, read only"></pre>
+        </section>
+
+      </div>
+    </section>
+
+    <!-- ── model ──────────────────────────────────────────────── -->
+    <section id="sec-model" class="section" role="tabpanel" aria-labelledby="tab-model" hidden>
+      <h2 class="section-title">The model</h2>
+      <p class="section-copy">
+        Where Ashley goes to think. This is the machine on your network running
+        the language model.
+      </p>
+
+      <div id="model-notice" class="notice" role="alert" aria-live="polite"></div>
+
+      <div class="field">
+        <label for="model-url">Address</label>
+        <input class="input" type="text" id="model-url" spellcheck="false"
+               autocapitalize="none" placeholder="http://10.0.0.10:8080/v1">
+        <p class="hint">The address of the machine running the model, ending in /v1.</p>
+      </div>
+
+      <div class="field">
+        <label for="model-id">Which model</label>
+        <input class="input" type="text" id="model-id" spellcheck="false" autocapitalize="none">
+        <p class="hint">The model's name or file path, exactly as the server reports it.</p>
+      </div>
+
+      <div class="field">
+        <label for="model-key">Key</label>
+        <input class="input" type="password" id="model-key" autocomplete="off" spellcheck="false">
+        <p class="hint">
+          Leave this alone to keep the key you already have. Most home setups
+          do not need one.
+        </p>
+      </div>
+
+      <div class="field">
+        <label for="model-timeout">How long to wait (seconds)</label>
+        <input class="input input-num" type="number" id="model-timeout" min="10" max="600" step="5">
+        <p class="hint">Longer replies need more time. 180 is a sensible default.</p>
+      </div>
+
+      <div class="row-actions">
+        <button id="btn-save-model" class="btn btn-primary" type="button">Save</button>
+        <button id="btn-test-model" class="btn btn-ghost" type="button">Test connection</button>
+      </div>
+
+      <div id="test-result" class="test-result" hidden></div>
+    </section>
+
+    <!-- ── appearance ─────────────────────────────────────────── -->
+    <section id="sec-appearance" class="section" role="tabpanel" aria-labelledby="tab-appearance" hidden>
+      <h2 class="section-title">Appearance</h2>
+      <p class="section-copy">
+        The sign-in screen's look, for anyone who has not picked their own.
+        Everybody can still choose a different one inside the app.
+      </p>
+
+      <div id="appearance-notice" class="notice" role="alert" aria-live="polite"></div>
+
+      <div class="field">
+        <span class="field-label">Sign-in screen look</span>
+        <div id="theme-cards" class="theme-cards" role="radiogroup" aria-label="Sign-in screen look"></div>
+      </div>
+
+      <button id="btn-save-appearance" class="btn btn-primary" type="button">Save</button>
+
+      <hr class="rule">
+
+      <div class="field">
+        <label for="device-theme">Look on this device</label>
+        <select class="select" id="device-theme"></select>
+        <p class="hint">Changes this screen straight away. Only affects this device.</p>
+      </div>
+    </section>
+
+    <!-- ── admin password ─────────────────────────────────────── -->
+    <section id="sec-password" class="section" role="tabpanel" aria-labelledby="tab-password" hidden>
+      <h2 class="section-title">Parents' password</h2>
+      <p class="section-copy">
+        This is the password for this settings page. It is not any child's
+        sign-in password.
+      </p>
+
+      <div id="pw-notice" class="notice" role="alert" aria-live="polite"></div>
+
+      <div class="field">
+        <label for="pw-new">New password</label>
+        <input class="input" type="password" id="pw-new" autocomplete="new-password">
+        <p class="hint">At least 8 characters.</p>
+      </div>
+
+      <div class="field">
+        <label for="pw-again">Type it again</label>
+        <input class="input" type="password" id="pw-again" autocomplete="new-password">
+      </div>
+
+      <button id="btn-save-password" class="btn btn-primary" type="button">Change the password</button>
+      <p class="hint">
+        Changing this signs out any other device that is in these settings right now.
+      </p>
+    </section>
+
+  </main>
+
+  <footer class="brand-credit brand-credit-ruled">
+    <span class="brand-credit-line">
+      Ashley AI &middot; an open-source project by
+      <span class="brand-credit-holder">Christopher Thompson</span>,
+      published under <span class="brand-credit-org">Volenti</span>.
+    </span>
+    <span class="brand-credit-sep" aria-hidden="true"></span>
+    <span class="brand-credit-line">
+      <a href="/help">Help</a> &middot;
+      <a href="/about">About &amp; licence</a> &middot;
+      <a href="https://github.com/tkalevra/AshleyAI" target="_blank" rel="noopener noreferrer">Source</a>
+    </span>
+    <span class="brand-licence">
+      Free software under the GNU AGPL v3 or later. It runs on your
+      hardware; nothing leaves this network.
+    </span>
+  </footer>
+</div>
+
+<!-- ── the guided tour ─────────────────────────────────────────────
+     Driven by assets/tour.js. The spotlight and the card are positioned
+     with CSS custom properties written from JS — never a style
+     attribute, which the CSP would refuse. -->
+<div id="tour" class="tour" hidden>
+  <div id="tour-scrim" class="tour-scrim"></div>
+  <div id="tour-spot" class="tour-spot" aria-hidden="true"></div>
+  <div id="tour-pop" class="tour-pop" role="dialog" aria-modal="true"
+       aria-labelledby="tour-title" aria-describedby="tour-copy" tabindex="-1">
+    <p class="tour-where" id="tour-where"></p>
+    <h2 class="tour-title" id="tour-title"></h2>
+    <p class="tour-copy" id="tour-copy"></p>
+    <div class="tour-foot">
+      <span class="tour-count" id="tour-count"></span>
+      <span class="tour-actions">
+        <button id="tour-prev" class="btn btn-ghost btn-compact" type="button">Back</button>
+        <button id="tour-next" class="btn btn-primary btn-compact" type="button">Next</button>
+        <button id="tour-done" class="btn btn-ghost btn-compact" type="button">Close</button>
+      </span>
+    </div>
+    <p class="tour-hint">Arrow keys move &middot; Escape closes</p>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<!-- ── templates ─────────────────────────────────────────────────── -->
+
+<template id="tpl-user">
+  <article class="user-row">
+    <div class="user-head">
+      <span class="disc disc-sm" data-disc><span class="disc-initial" data-initial></span></span>
+      <span class="user-ident">
+        <span class="user-name" data-title></span>
+        <span class="user-tag" data-tag></span>
+      </span>
+      <span class="chips" data-chips></span>
+      <span class="user-move">
+        <button class="icon-btn" type="button" data-up aria-label="Move up">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V6M6 12l6-6 6 6"/></svg>
+        </button>
+        <button class="icon-btn" type="button" data-down aria-label="Move down">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v13M6 12l6 6 6-6"/></svg>
+        </button>
+      </span>
+      <button class="btn btn-ghost btn-compact" type="button" data-rules>Rules</button>
+      <button class="btn btn-ghost btn-compact" type="button" data-toggle
+              aria-expanded="false">Change</button>
+    </div>
+
+    <div class="user-body" data-body hidden>
+      <div class="notice notice-error" data-error role="alert"></div>
+
+      <div class="field">
+        <label data-label-name>Their name</label>
+        <input class="input" type="text" maxlength="32" data-name>
+      </div>
+
+      <div class="field">
+        <span class="field-label">Their colour</span>
+        <div class="swatches" role="radiogroup" aria-label="Their colour" data-swatches></div>
+      </div>
+
+      <div class="field">
+        <label class="check">
+          <input type="checkbox" data-protected>
+          <span>Ask for a password when they sign in</span>
+        </label>
+      </div>
+
+      <div class="field">
+        <label data-label-password>New password</label>
+        <input class="input" type="password" autocomplete="new-password" data-password>
+        <p class="hint" data-password-hint></p>
+      </div>
+
+      <div class="row-actions">
+        <button class="btn btn-primary" type="button" data-save>Save</button>
+        <button class="btn btn-ghost" type="button" data-clear-password>Remove their password</button>
+        <button class="btn btn-danger user-delete" type="button" data-delete>Delete</button>
+      </div>
+    </div>
+  </article>
+</template>
+
+<template id="tpl-pick">
+  <button class="pick-row" type="button">
+    <span class="disc disc-sm" data-disc><span class="disc-initial" data-initial></span></span>
+    <span class="pick-text">
+      <span class="pick-name" data-name></span>
+      <span class="pick-sub" data-sub></span>
+    </span>
+    <span class="chips" data-chips></span>
+  </button>
+</template>
+
+<template id="tpl-preset-card">
+  <button class="preset-card" type="button" role="radio" aria-checked="false">
+    <span class="preset-card-top">
+      <span class="preset-card-label" data-label></span>
+      <span class="chips" data-chips></span>
+    </span>
+    <span class="preset-card-desc" data-desc></span>
+  </button>
+</template>
+
+<template id="tpl-chip">
+  <span class="chip"></span>
+</template>
+
+<template id="tpl-setup-step">
+  <li class="setup-step">
+    <button class="setup-step-head" type="button" aria-expanded="false" data-head>
+      <span class="setup-tick" data-tick aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+      </span>
+      <span class="setup-step-text">
+        <span class="setup-step-title" data-title></span>
+        <span class="setup-step-lead" data-lead></span>
+        <span class="setup-step-summary" data-summary></span>
+      </span>
+      <span class="state-chip" data-state></span>
+    </button>
+    <div class="setup-step-body" data-body hidden>
+      <div data-detail></div>
+      <div class="row-actions" data-actions></div>
+    </div>
+  </li>
+</template>
+
+<template id="tpl-swatch">
+  <button class="swatch" type="button" role="radio" aria-checked="false"></button>
+</template>
+
+<template id="tpl-theme-card">
+  <button class="theme-card" type="button" role="radio" aria-checked="false">
+    <span class="theme-swatch" data-swatch>
+      <span class="theme-swatch-dot" data-dot></span>
+    </span>
+    <span class="theme-card-text">
+      <span class="theme-card-name" data-name></span>
+      <span class="theme-card-blurb" data-blurb></span>
+    </span>
+  </button>
+</template>
+
+<!-- help_copy.js first: it is the one source of feature wording, and both
+     the checklist and the tour read from it. admin.js before those two,
+     which sit on top of the surface it exposes. -->
+<script src="/assets/help_copy.js?v=1"></script>
+<script src="/assets/admin.js?v=3"></script>
+<script src="/assets/onboarding.js?v=1"></script>
+<script src="/assets/tour.js?v=1"></script>
+</body>
+</html>

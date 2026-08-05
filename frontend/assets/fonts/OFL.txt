@@ -1,0 +1,8 @@
+Syne (c) 2017-2023 Bonjour Monde
+Space Grotesk (c) 2020 Florian Karsten
+
+Both fonts are licensed under the SIL Open Font License, Version 1.1.
+Full licence text: https://openfontlicense.org/
+
+These woff2 files are the latin and latin-ext subsets published by Google
+Fonts, downloaded and vendored here so this app never contacts a CDN.

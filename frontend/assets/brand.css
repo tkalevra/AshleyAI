@@ -1,0 +1,224 @@
+/* ── brand.css ─────────────────────────────────────────────────────────
+   A light Volenti identity layer: a wordmark treatment and a footer
+   credit. Nothing here restyles the app.
+
+   THREE RULES THIS FILE KEEPS
+   1. ADDITIVE ONLY. Every selector below is a new `.brand-*` class. It
+      overrides nothing that base.css / app.css / login.css / admin.css
+      already own -- notably it does NOT touch `.wordmark` or
+      `.admin-brand`, which are the app's own and stay the app's own.
+      Removing the <link> to this file leaves the app exactly as it was.
+   2. TOKENS ONLY. No raw colour, anywhere. Every value resolves through
+      a custom property defined in base.css, so all five themes
+      (dark / ivory / blood / blue / forest) are covered by construction
+      rather than by five hand-written blocks.
+   3. CSP-SAFE. External stylesheet, no @import of a remote sheet, no
+      url() to another origin, no webfont beyond the two already
+      self-hosted in fonts.css. The policy is
+      `default-src 'self'; style-src 'self'` with no 'unsafe-inline'.
+
+   OPT-IN. Nothing applies until a page links it:
+       <link rel="stylesheet" href="/assets/brand.css?v=1">
+   and uses the classes below. See the end of this file for the markup
+   each block expects.
+
+   Ashley AI -- Copyright (C) 2026 Christopher Thompson. AGPL-3.0-or-later.
+   Published under Volenti. Volenti is the outfit, not the copyright
+   holder; keep those two separate wherever both appear.
+   ------------------------------------------------------------------ */
+
+
+/* ── the mark ─────────────────────────────────────────────────────────
+   Ashley renders *actions* as stage directions, so the asterisk is the
+   app's own signature rather than a decoration. Drawn as type, not as an
+   asset: one glyph in the display face, so it inherits the theme's ember
+   and needs no network request and no extra file.                      */
+
+.brand-mark {
+  display: inline-block;
+  font-family: var(--display);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--ember);
+  /* The asterisk sits high in its em box; nudge it onto the baseline of
+     whatever it is sitting beside. */
+  transform: translateY(0.08em);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.brand-mark::before {
+  content: '\002A';   /* * */
+}
+
+
+/* ── the wordmark ─────────────────────────────────────────────────────
+   For surfaces that want the name set properly and are not the login
+   hero (which has its own, larger treatment in login.css).             */
+
+.brand-wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.34em;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.brand-wordmark .brand-mark {
+  font-size: 0.82em;
+}
+
+/* The qualifier after the name -- "Parents' settings", "AI", a section.
+   Quiet by design: the name carries, this only locates you. */
+.brand-wordmark-sub {
+  font-family: var(--body);
+  font-weight: 500;
+  font-size: 0.6em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+
+/* ── footer credit ────────────────────────────────────────────────────
+   The one place the project says who made it and under what. Small,
+   quiet, and out of the way: a child should never have to read past it
+   to get to the app.                                                   */
+
+.brand-credit {
+  margin: 0;
+  padding: 18px 0 22px;
+  font-family: var(--body);
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: var(--dim);
+  text-align: center;
+  text-wrap: balance;
+}
+
+.brand-credit-line {
+  display: block;
+}
+
+/* Reads as one sentence on a phone, two on anything wider. */
+.brand-credit-sep {
+  display: none;
+}
+
+@media (min-width: 560px) {
+  .brand-credit-line {
+    display: inline;
+  }
+
+  .brand-credit-sep {
+    display: inline;
+    padding: 0 0.5em;
+    color: var(--line);
+  }
+
+  .brand-credit-sep::before {
+    content: '\00B7';   /* middle dot */
+  }
+}
+
+/* The name of the person who holds the copyright, and the name of the
+   outfit it is published under, are both set slightly brighter than the
+   surrounding line -- equally. Neither outranks the other visually,
+   because they are not the same claim. */
+.brand-credit-holder,
+.brand-credit-org {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.brand-credit a {
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+  transition: color 0.15s var(--ease), border-color 0.15s var(--ease);
+}
+
+.brand-credit a:hover,
+.brand-credit a:focus-visible {
+  color: var(--text);
+  border-bottom-color: var(--ember-line);
+}
+
+/* base.css already gives :focus-visible an ember outline; this just keeps
+   the underline from fighting it. */
+.brand-credit a:focus-visible {
+  outline-offset: 3px;
+}
+
+
+/* ── licence note ─────────────────────────────────────────────────────
+   Optional second line for the settings panel, where a parent is the
+   audience and "you can read the source" is worth saying once.         */
+
+.brand-licence {
+  margin: 6px 0 0;
+  font-family: var(--body);
+  font-size: 11px;
+  color: var(--dim);
+  text-align: center;
+}
+
+
+/* ── a bordered variant ───────────────────────────────────────────────
+   For pages that end in content rather than in whitespace and need the
+   credit visually detached from it.                                    */
+
+.brand-credit-ruled {
+  border-top: 1px solid var(--line-soft);
+  margin-top: 28px;
+}
+
+
+/* ── motion ───────────────────────────────────────────────────────────
+   Nothing here animates beyond a colour fade, but honour the preference
+   rather than assume nobody set it.                                    */
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-credit a {
+    transition: none;
+  }
+}
+
+
+/* ── expected markup ──────────────────────────────────────────────────
+
+   Wordmark (e.g. an admin header):
+
+     <span class="brand-wordmark">
+       <span class="brand-mark" aria-hidden="true"></span>
+       Ashley
+       <span class="brand-wordmark-sub">AI</span>
+     </span>
+
+   Footer credit -- note that the two names carry different claims and the
+   wording must keep them apart:
+
+     <footer class="brand-credit brand-credit-ruled">
+       <span class="brand-credit-line">
+         Ashley AI &middot; an open-source project by
+         <span class="brand-credit-holder">Christopher Thompson</span>,
+         published under <span class="brand-credit-org">Volenti</span>.
+       </span>
+       <span class="brand-credit-sep" aria-hidden="true"></span>
+       <span class="brand-credit-line">
+         <a href="https://github.com/tkalevra/AshleyAI">Source</a>
+       </span>
+       <span class="brand-licence">
+         Free software under the GNU AGPL v3 or later. It runs on your
+         hardware; nothing leaves this network.
+       </span>
+     </footer>
+
+   The `.brand-mark` span is decorative and carries aria-hidden, because a
+   screen reader announcing "asterisk Ashley" helps nobody.
+   ------------------------------------------------------------------ */

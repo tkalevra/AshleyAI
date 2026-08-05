@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0a0912">
+<title>Ashley</title>
+<link rel="icon" href="/assets/favicon.svg?v=2" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/base.css?v=3">
+<link rel="stylesheet" href="/assets/app.css?v=3">
+<link rel="stylesheet" href="/assets/brand.css?v=1">
+<script src="/assets/theme.js?v=1"></script>
+</head>
+<body class="app-body">
+
+<div id="scrim" class="scrim" hidden></div>
+
+<!-- ── cast (sidebar) ─────────────────────────────────────────────── -->
+<aside id="cast" class="cast" aria-label="Your cast">
+  <div class="cast-head">
+    <span class="cast-mark">Ashley</span>
+    <button id="btn-close-cast" class="icon-btn narrow-only" aria-label="Close cast">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+
+  <div class="cast-scroll">
+    <p class="cast-label">Cast</p>
+    <div id="char-list" class="char-list"></div>
+  </div>
+
+  <div class="cast-foot">
+    <button id="btn-new-char" class="btn-new-char">
+      <span class="plus" aria-hidden="true">+</span> New character
+    </button>
+
+    <div class="theme-row">
+      <label for="theme-select">Look</label>
+      <select id="theme-select" class="select-sm"></select>
+    </div>
+
+    <div class="account">
+      <div class="account-who">
+        <span id="account-disc" class="account-disc" aria-hidden="true"></span>
+        <span id="account-name" class="account-name"></span>
+      </div>
+      <div class="account-actions">
+        <button id="btn-logout" class="link-btn">Sign out</button>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ── main ───────────────────────────────────────────────────────── -->
+<main class="stage-main">
+
+  <header class="topbar">
+    <button id="btn-open-cast" class="icon-btn narrow-only" aria-label="Open cast">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+
+    <div id="topbar-idle" class="topbar-idle">Ashley</div>
+
+    <div id="topbar-char" class="topbar-char" hidden>
+      <div id="header-avatar" class="avatar avatar-md"></div>
+      <div class="topbar-text">
+        <div id="header-name" class="topbar-name"></div>
+        <div id="header-tagline" class="topbar-tagline"></div>
+      </div>
+    </div>
+
+    <div id="topbar-actions" class="topbar-actions" hidden>
+      <button id="btn-history" class="btn btn-ghost btn-compact">History</button>
+      <button id="btn-new-chat" class="btn btn-ghost btn-compact">New chat</button>
+    </div>
+  </header>
+
+  <section id="empty-state" class="empty">
+    <p class="empty-mark">Ashley</p>
+    <h2 class="empty-title">Nobody's on stage yet</h2>
+    <p class="empty-copy">
+      Pick someone from your cast to start talking, or write a new character.
+      They keep their personality across every conversation.
+    </p>
+    <button id="btn-empty-new" class="btn btn-primary">Write a character</button>
+  </section>
+
+  <div id="messages" class="messages" hidden></div>
+
+  <div id="composer" class="composer" hidden>
+    <div class="composer-row">
+      <textarea id="msg-input" class="msg-input" rows="1"
+                placeholder="Say something…" aria-label="Message"></textarea>
+      <button id="btn-send" class="send" aria-label="Send message">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3.4 20.4l17.45-7.48a1 1 0 000-1.84L3.4 3.6a.99.99 0 00-1.39.91L2 9.12c0 .5.37.93.87.99L17 12 2.87 13.88c-.5.07-.87.5-.87 1l.01 4.61c0 .71.73 1.2 1.39.91z" fill="currentColor" stroke="none"/>
+        </svg>
+      </button>
+    </div>
+    <p class="composer-hint">Enter sends &middot; Shift+Enter makes a new line &middot; *asterisks* are actions</p>
+  </div>
+
+</main>
+
+<!-- ── history drawer ─────────────────────────────────────────────── -->
+<aside id="history-panel" class="history-panel" aria-label="Chat history">
+  <div class="history-head">
+    <h3 class="history-title">History</h3>
+    <button id="btn-close-history" class="icon-btn" aria-label="Close history">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div id="history-list" class="history-list"></div>
+</aside>
+
+<div id="modal-root"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<!-- ── templates (cloned in JS; user text is set with textContent) ── -->
+
+<template id="tpl-char-item">
+  <div class="char-item" role="button" tabindex="0">
+    <div class="avatar avatar-sm" data-avatar></div>
+    <div class="char-text">
+      <div class="char-name" data-name></div>
+      <div class="char-sub" data-sub></div>
+    </div>
+    <button class="char-edit" data-edit aria-label="Edit character">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4zM14 6l4 4"/></svg>
+    </button>
+    <button class="char-del" data-del aria-label="Delete character">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V5h6v2M7 7l1 13h8l1-13"/></svg>
+    </button>
+  </div>
+</template>
+
+<template id="tpl-message">
+  <div class="msg">
+    <div class="avatar avatar-xs" data-avatar></div>
+    <div class="bubble" data-bubble></div>
+  </div>
+</template>
+
+<template id="tpl-typing">
+  <div class="msg msg-assistant">
+    <div class="avatar avatar-xs" data-avatar></div>
+    <div class="bubble typing">
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-history-item">
+  <button class="history-item">
+    <span class="history-date" data-date></span>
+    <span class="history-preview" data-preview></span>
+    <span class="history-count" data-count></span>
+  </button>
+</template>
+
+<template id="tpl-char-modal">
+  <div class="modal-scrim">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-head">
+        <h2 class="modal-title" id="modal-title" data-title></h2>
+        <button class="icon-btn" data-close aria-label="Close">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="notice notice-error" data-error role="alert"></div>
+
+        <div class="field">
+          <span class="field-label">Portrait</span>
+          <div class="portrait-row">
+            <div class="avatar avatar-lg" data-preview></div>
+            <div class="portrait-actions">
+              <label class="btn btn-ghost btn-compact file-label">
+                Upload
+                <input type="file" accept="image/png,image/jpeg,image/gif,image/webp"
+                       data-file hidden>
+              </label>
+              <button class="btn btn-ghost btn-compact" data-pick>Choose saved</button>
+              <button class="btn btn-ghost btn-compact" data-clear>Clear</button>
+            </div>
+          </div>
+          <div class="picker" data-picker hidden></div>
+        </div>
+
+        <div class="field">
+          <label for="cm-name">Name</label>
+          <input class="input" type="text" id="cm-name" data-name maxlength="60"
+                 placeholder="Nova, Shadow, Mr. Pemberton…">
+        </div>
+
+        <div class="field">
+          <label for="cm-emoji">Emoji</label>
+          <input class="input input-narrow" type="text" id="cm-emoji" data-emoji maxlength="4"
+                 placeholder="🙂">
+          <p class="hint">Stands in for a portrait if you don't upload one.</p>
+        </div>
+
+        <div class="field">
+          <label for="cm-tagline">Tagline</label>
+          <input class="input" type="text" id="cm-tagline" data-tagline maxlength="120"
+                 placeholder="One line about them">
+        </div>
+
+        <div class="field">
+          <label for="cm-personality">Personality</label>
+          <textarea class="textarea" id="cm-personality" data-personality
+                    placeholder="How they talk, what they care about, how they treat people…"></textarea>
+          <p class="hint">This shapes every reply they give.</p>
+        </div>
+
+        <div class="field">
+          <label for="cm-backstory">Backstory</label>
+          <textarea class="textarea" id="cm-backstory" data-backstory
+                    placeholder="Where they're from, what happened to them, what they want…"></textarea>
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <button class="btn btn-ghost" data-cancel>Cancel</button>
+        <button class="btn btn-primary" data-save>Save character</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script src="/assets/app.js?v=4"></script>
+</body>
+</html>

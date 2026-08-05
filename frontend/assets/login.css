@@ -1,0 +1,412 @@
+/* The way in. One screen: the wordmark, then everybody's face.
+   Modelled on an OS login screen — pick a person, and only then get asked
+   for anything. */
+
+.login-body {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px 96px;
+  overflow-x: hidden;
+}
+
+/* Ambient light, low and slow. Two pools of colour, no animation loop that
+   draws attention to itself. */
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(60ch 60ch at 18% 12%, var(--aurora-a), transparent 60%),
+    radial-gradient(50ch 50ch at 88% 82%, var(--aurora-b), transparent 62%);
+  pointer-events: none;
+}
+
+.gate {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 34px;
+  animation: rise 0.5s var(--ease) both;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── the pitch ──────────────────────────────────────────────────── */
+
+.pitch {
+  text-align: center;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin: 0 0 16px;
+}
+
+.wordmark {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(52px, 9vw, 84px);
+  line-height: 0.88;
+  letter-spacing: -0.045em;
+  margin: 0;
+  color: var(--text);
+}
+
+/* The signature: this app renders *actions* as stage directions, so the
+   landing page introduces that convention before you ever send a message. */
+.stage-line {
+  margin: 16px 0 0;
+  font-size: clamp(16px, 2.4vw, 20px);
+}
+
+.stage {
+  font-style: italic;
+  color: var(--ember);
+  position: relative;
+}
+
+.stage::before,
+.stage::after {
+  content: '*';
+  color: var(--ember-dim);
+  font-style: normal;
+  opacity: 0.65;
+}
+
+.stage::before { margin-right: 0.12em; }
+.stage::after  { margin-left: 0.12em; }
+
+/* ── first-run password card ────────────────────────────────────── */
+
+.firstrun {
+  width: 100%;
+  max-width: 520px;
+  background: var(--slab);
+  border: 1px solid var(--ember-line);
+  border-radius: var(--r-lg);
+  padding: 22px 24px 20px;
+  box-shadow: var(--shadow-lg);
+  text-align: left;
+}
+
+.firstrun-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ember);
+  margin-bottom: 8px;
+}
+
+.firstrun-copy {
+  margin: 0 0 16px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.firstrun-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.firstrun-password {
+  flex: 1;
+  min-width: 200px;
+  font-family: ui-monospace, 'SFMono-Regular', 'Consolas', monospace;
+  font-size: 17px;
+  letter-spacing: 0.06em;
+  padding: 11px 14px;
+  border-radius: var(--r-sm);
+  background: var(--void);
+  border: 1px dashed var(--line);
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.firstrun-dismiss {
+  margin-top: 14px;
+}
+
+/* ── the picker ─────────────────────────────────────────────────── */
+
+.picker-wrap {
+  width: 100%;
+  text-align: center;
+}
+
+.picker-title {
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--body);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 22px;
+}
+
+.picker-wrap .notice {
+  max-width: 420px;
+  margin: 0 auto 18px;
+  text-align: left;
+}
+
+.tiles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.tiles-status {
+  font-size: 13px;
+  color: var(--dim);
+  margin: 8px 0 0;
+}
+
+.tile {
+  position: relative;
+  width: 132px;
+  padding: 20px 12px 16px;
+  border-radius: var(--r-lg);
+  border: 1px solid transparent;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  transition: background 0.16s var(--ease), border-color 0.16s var(--ease),
+    transform 0.16s var(--ease);
+}
+
+.tile:hover,
+.tile:focus-visible {
+  background: var(--slab);
+  border-color: var(--line);
+  transform: translateY(-2px);
+}
+
+.tile-name {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--text);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The disc itself lives in base.css — it is shared with the settings page and
+   the transcript. Only its lift-on-hover belongs to the tile. */
+.tile:hover .disc,
+.tile:focus-visible .disc {
+  box-shadow: 0 12px 26px -8px var(--disc-accent);
+}
+
+.tile-lock {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+}
+
+.tile-lock svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── unlock step ────────────────────────────────────────────────── */
+
+.unlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  animation: rise 0.24s var(--ease) both;
+}
+
+.unlock-name {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.unlock-form {
+  width: 100%;
+  max-width: 320px;
+  text-align: left;
+}
+
+.submit {
+  width: 100%;
+  margin-top: 4px;
+  padding: 13px;
+  font-size: 15px;
+}
+
+.unlock-back {
+  display: block;
+  margin: 16px auto 0;
+}
+
+/* ── parents' corner ────────────────────────────────────────────── */
+
+.admin-corner {
+  position: fixed;
+  right: 18px;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 14px 9px 11px;
+  border-radius: var(--r-full);
+  border: 1px solid transparent;
+  font-size: 12.5px;
+  color: var(--dim);
+  transition: color 0.16s var(--ease), border-color 0.16s var(--ease),
+    background 0.16s var(--ease);
+}
+
+.admin-corner:hover {
+  color: var(--text);
+  border-color: var(--line);
+  background: var(--slab);
+}
+
+.admin-corner svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.admin-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: var(--scrim);
+  backdrop-filter: blur(4px);
+  animation: fade 0.15s var(--ease) both;
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.admin-pop {
+  position: fixed;
+  z-index: 50;
+  right: 18px;
+  bottom: calc(66px + env(safe-area-inset-bottom));
+  width: 320px;
+  max-width: calc(100vw - 36px);
+  background: var(--slab);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 22px 22px 20px;
+  box-shadow: var(--shadow-lg);
+  animation: pop 0.18s var(--ease) both;
+}
+
+@keyframes pop {
+  from { opacity: 0; transform: translateY(8px) scale(0.985); }
+  to   { opacity: 1; transform: none; }
+}
+
+.admin-pop-title {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.admin-pop-copy {
+  margin: 0 0 16px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--dim);
+}
+
+.admin-pop-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.admin-pop-actions .btn {
+  padding: 9px 15px;
+  font-size: 14px;
+}
+
+/* ── the credit line ────────────────────────────────────────────────
+   brand.css owns how this looks. All that is needed here is to stop it
+   claiming any of the column's generous gap: this screen belongs to
+   whoever is signing in, and the licence links are for the one adult who
+   goes looking for them. */
+
+.login-credit {
+  padding: 0;
+  margin-top: -14px;
+}
+
+/* ── narrow screens ─────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .login-body {
+    align-items: flex-start;
+    padding: 36px 18px 92px;
+  }
+
+  .gate {
+    gap: 26px;
+  }
+
+  .tiles {
+    gap: 6px;
+  }
+
+  .tile {
+    width: 108px;
+    padding: 16px 8px 13px;
+  }
+
+  .tile .disc {
+    width: 64px;
+    height: 64px;
+  }
+
+  .tile .disc-initial {
+    font-size: 27px;
+  }
+
+  .admin-pop {
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-width: none;
+  }
+}

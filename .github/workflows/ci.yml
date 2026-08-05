@@ -1,0 +1,174 @@
+name: CI
+
+# Ashley has no test suite. These checks are the floor: the code parses, and the
+# frontend does not violate the Content Security Policy the backend actually sends.
+# The CSP gate is the one that matters most -- an inline script or an on* handler
+# renders a page blank in a browser while looking perfectly fine in an editor.
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    name: Python syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Parse every Python file
+        run: |
+          set -euo pipefail
+          fail=0
+          while IFS= read -r f; do
+            if python3 -c "import ast,sys; ast.parse(open(sys.argv[1], encoding='utf-8').read(), sys.argv[1])" "$f"; then
+              echo "ok    $f"
+            else
+              echo "FAIL  $f"
+              fail=1
+            fi
+          done < <(find . -name '*.py' -not -path '*/__pycache__/*' -not -path './.git/*' | sort)
+          exit "$fail"
+
+      - name: The two files that must always exist
+        run: |
+          set -euo pipefail
+          test -f backend/server.py
+          test -f pipeline/ashley_pipeline.py
+
+  javascript:
+    name: JavaScript syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: node --check every frontend script
+        run: |
+          set -euo pipefail
+          fail=0
+          while IFS= read -r f; do
+            if node --check "$f"; then
+              echo "ok    $f"
+            else
+              echo "FAIL  $f"
+              fail=1
+            fi
+          done < <(find frontend -name '*.js' | sort)
+          exit "$fail"
+
+  csp:
+    name: CSP gate (no inline script/style/handlers)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The backend sends:
+      #   default-src 'self'; script-src 'self'; style-src 'self'; ...
+      # with no 'unsafe-inline' anywhere. Each grep below must find NOTHING.
+      # `grep -q` returning 0 means a violation was found, so the logic is inverted
+      # on purpose -- read it twice before "fixing" it.
+
+      - name: No inline <script> (every script must carry src=)
+        run: |
+          set -uo pipefail
+          if grep -rnPI '<script(?![^>]*\bsrc=)' --include='*.html' frontend/; then
+            echo "::error::inline <script> found -- CSP is script-src 'self' with no 'unsafe-inline'."
+            echo "Move the code to an external file under frontend/assets/ and link it with src=."
+            exit 1
+          fi
+          echo "ok: no inline script blocks"
+
+      - name: No inline style attributes or <style> blocks
+        run: |
+          set -uo pipefail
+          if grep -rnEI '<style|[[:space:]]style[[:space:]]*=' --include='*.html' frontend/; then
+            echo "::error::inline style found -- CSP is style-src 'self' with no 'unsafe-inline'."
+            echo "Move the rule to a stylesheet under frontend/assets/."
+            exit 1
+          fi
+          echo "ok: no inline styles"
+
+      - name: No on*= event-handler attributes
+        run: |
+          set -uo pipefail
+          if grep -rnEI '[[:space:]]on[a-z]+[[:space:]]*=' --include='*.html' frontend/; then
+            echo "::error::inline event handler found -- blocked by script-src 'self'."
+            echo "Attach the listener with addEventListener in an external script."
+            exit 1
+          fi
+          echo "ok: no inline event handlers"
+
+      - name: No remote assets (CDN, remote fonts, remote images)
+        run: |
+          set -uo pipefail
+          found=0
+          # Asset-LOADING contexts only. A plain <a href="https://..."> is a
+          # navigation, not a subresource, and is fine.
+          if grep -rnEI '<(link|script|img|source|iframe|video|audio|embed|object)[^>]+(src|href)[[:space:]]*=[[:space:]]*["'"'"']?https?://' \
+               --include='*.html' frontend/; then
+            found=1
+          fi
+          if grep -rnEI '(url\([[:space:]]*["'"'"']?|@import[^;]*)https?://' \
+               --include='*.css' frontend/; then
+            found=1
+          fi
+          if [ "$found" -ne 0 ]; then
+            echo "::error::remote subresource found -- everything is served from 'self'."
+            echo "Ashley is expected to work with the internet unplugged."
+            exit 1
+          fi
+          echo "ok: no remote assets"
+
+  hygiene:
+    name: Repository hygiene
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: .env must never be committed
+        run: |
+          set -uo pipefail
+          if git ls-files --error-unmatch .env >/dev/null 2>&1; then
+            echo "::error::.env is tracked. It holds every secret and must stay untracked."
+            exit 1
+          fi
+          test -f .env.example || { echo "::error::.env.example is missing."; exit 1; }
+          echo "ok: .env untracked, .env.example present"
+
+      - name: Licence and attribution files present
+        run: |
+          set -uo pipefail
+          missing=0
+          for f in LICENSE README.md AUTHORS SECURITY.md CONTRIBUTING.md; do
+            if [ ! -f "$f" ]; then echo "::error::$f is missing."; missing=1; fi
+          done
+          exit "$missing"
+
+      - name: Copyright is attributed to the holder, not the brand
+        run: |
+          set -uo pipefail
+          # Volenti is the outfit Ashley is published under. Copyright is held
+          # personally by Christopher Thompson. These two must never be conflated.
+          # Matches an actual attribution line -- a copyright marker followed only
+          # by a year and the brand name -- not prose that mentions both words.
+          if grep -rnEIi '(©|\(c\)|copyright)[[:space:]]*(\(c\)|©)?[[:space:]]*[0-9,[:space:]-]*volenti' \
+               --include='*.md' --include='*.py' --include='*.css' \
+               --include='*.js' --include='*.html' --include='*.yml' \
+               --include='AUTHORS' . ; then
+            echo "::error::copyright attributed to Volenti. It is held by Christopher Thompson."
+            exit 1
+          fi
+          echo "ok: copyright attribution is correct"

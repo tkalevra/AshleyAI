@@ -1,0 +1,12 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability or safety bypass
+    url: https://github.com/tkalevra/AshleyAI/security/advisories/new
+    about: >-
+      Do NOT open a public issue. This includes any way to get a model past
+      SAFETY_CORE. Report it privately here — see SECURITY.md.
+  - name: Question about setting it up
+    url: https://github.com/tkalevra/AshleyAI/discussions
+    about: >-
+      Deployment and configuration questions belong in Discussions. Check
+      docs/deployment.md and docs/configuration.md first.

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0a0912">
+<title>Ashley — about</title>
+<link rel="icon" href="/assets/favicon.svg?v=2" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/base.css?v=3">
+<link rel="stylesheet" href="/assets/help.css?v=1">
+<link rel="stylesheet" href="/assets/brand.css?v=1">
+<script src="/assets/theme.js?v=1"></script>
+</head>
+<body class="doc-body">
+
+<div class="aurora" aria-hidden="true"></div>
+
+<div class="doc">
+
+  <header class="doc-top">
+    <span class="brand-wordmark">
+      <span class="brand-mark" aria-hidden="true"></span>
+      Ashley
+      <span class="brand-wordmark-sub">About</span>
+    </span>
+    <nav class="doc-top-actions" aria-label="Elsewhere">
+      <a class="btn btn-ghost btn-compact" href="/help">Help</a>
+      <a class="btn btn-ghost btn-compact" href="/">Back to Ashley</a>
+    </nav>
+  </header>
+
+  <main class="doc-main">
+
+    <!-- The mark is the app's own asterisk, drawn as an SVG served from
+         this origin. No remote logo: the policy is default-src 'self'. -->
+    <div class="doc-hero">
+      <img class="doc-hero-mark" src="/assets/favicon.svg?v=2" alt="" width="52" height="52">
+      <span class="brand-wordmark">
+        <span class="brand-mark" aria-hidden="true"></span>
+        Ashley
+        <span class="brand-wordmark-sub">AI</span>
+      </span>
+    </div>
+
+    <h1 class="doc-title">About Ashley</h1>
+
+    <p class="doc-lede">
+      Ashley is a character-chat app for children and teenagers that runs on
+      your own hardware. A child writes the characters and does the talking;
+      a parent sets the safety layer, one child at a time. It talks to a
+      language model on your own network, and every conversation stays on
+      the machine Ashley runs on.
+    </p>
+
+    <dl class="doc-facts">
+      <div class="doc-fact">
+        <dt>Copyright</dt>
+        <dd>
+          Copyright (C) 2026 Christopher Thompson
+          <span class="doc-fact-note">Held personally by the author.</span>
+        </dd>
+      </div>
+      <div class="doc-fact">
+        <dt>Licence</dt>
+        <dd>
+          GNU Affero General Public License, version 3 or later
+          <span class="doc-fact-note">
+            The full text ships with the source, in the LICENSE file at the
+            root of the
+            <a href="https://github.com/tkalevra/AshleyAI/blob/main/LICENSE"
+               target="_blank" rel="noopener noreferrer">repository</a>.
+          </span>
+        </dd>
+      </div>
+      <div class="doc-fact">
+        <dt>Published by</dt>
+        <dd>
+          <a href="https://volenti.ca" target="_blank" rel="noopener noreferrer">Volenti</a>
+          <span class="doc-fact-note">
+            Volenti is the outfit Ashley is published under. It does not hold
+            the copyright.
+          </span>
+        </dd>
+      </div>
+      <div class="doc-fact">
+        <dt>Source</dt>
+        <dd>
+          <a href="https://github.com/tkalevra/AshleyAI"
+             target="_blank" rel="noopener noreferrer">github.com/tkalevra/AshleyAI</a>
+          <span class="doc-fact-note">
+            The complete corresponding source for the version you are using.
+          </span>
+        </dd>
+      </div>
+    </dl>
+
+    <section class="doc-section" id="licence">
+      <h2 class="doc-h">Why the source link is here</h2>
+      <p class="doc-p">
+        The AGPL is a network licence. Anyone who uses this software over a
+        network — including anyone in your household using it right now — is
+        entitled to the source it is running. The link above is how Ashley
+        meets that, so it belongs on a page anybody can reach rather than in
+        a file only the person who installed it will ever open.
+      </p>
+      <p class="doc-p">
+        You are free to run it, read it, change it and pass it on. If you
+        publish a modified version and let other people use it over a
+        network, the same licence asks you to make your changes available in
+        turn.
+      </p>
+    </section>
+
+    <section class="doc-section" id="safety">
+      <h2 class="doc-h">The safety model, briefly</h2>
+      <p class="doc-p">
+        Three things wrap every message: the rules chosen for that person,
+        the character the child wrote, and a short set of rules that apply to
+        everybody and cannot be edited from the app. They are sent in that
+        order, with the fixed rules last, because what comes last carries the
+        most weight.
+      </p>
+      <p class="doc-p">
+        Be clear about what that is. It is prompt-level safety layered over a
+        language model. It reduces risk; it does not eliminate it, and
+        somebody determined enough can talk any model past instructions like
+        these. Conversations are stored unencrypted on this machine, which
+        means a parent can read them. None of it substitutes for knowing
+        roughly what your child is doing.
+      </p>
+      <p class="doc-p">
+        <a class="link-btn link-btn-inline" href="/help#limits">The longer version, in plain language</a>
+        &middot;
+        <a class="link-btn link-btn-inline" href="/help#core">What the fixed rules cover</a>
+      </p>
+    </section>
+
+  </main>
+
+  <footer class="brand-credit brand-credit-ruled">
+    <span class="brand-credit-line">
+      Ashley AI &middot; an open-source project by
+      <span class="brand-credit-holder">Christopher Thompson</span>,
+      published under <span class="brand-credit-org">Volenti</span>.
+    </span>
+    <span class="brand-credit-sep" aria-hidden="true"></span>
+    <span class="brand-credit-line">
+      <a href="/help">Help</a> &middot;
+      <a href="https://github.com/tkalevra/AshleyAI" target="_blank" rel="noopener noreferrer">Source</a>
+    </span>
+    <span class="brand-licence">
+      Free software under the GNU AGPL v3 or later. It runs on your
+      hardware; nothing leaves this network.
+    </span>
+  </footer>
+
+</div>
+
+</body>
+</html>

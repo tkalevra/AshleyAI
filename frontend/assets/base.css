@@ -1,0 +1,678 @@
+@import url('fonts.css');
+
+/* ── tokens ──────────────────────────────────────────────────────────
+   Every colour in this app resolves through a custom property. Nothing
+   downstream (app.css, login.css, admin.css) is allowed a raw hex, so a
+   theme is a single block of variable overrides and nothing else.
+
+   The two accents mean different things and keep their meaning in every
+   theme: --accent is "you" (your bubble, primary buttons, focus glow),
+   --ember is the roleplay voice (stage directions) and the focus ring.
+   Nothing else gets to be loud.
+
+   Themes are selected with data-theme on <html>, written before first
+   paint by assets/theme.js.                                            */
+
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --void: #0a0912;
+  --slab: #14121f;
+  --slab-2: #1c1929;
+  --slab-3: #262236;
+  --line: #2e2942;
+  --line-soft: #221e31;
+
+  --overlay: rgba(20, 18, 31, 0.72);
+  --scrim: rgba(6, 5, 11, 0.74);
+
+  --text: #efedf7;
+  --muted: #a49dc0;
+  /* 4.8:1 on --void. The old #6d668d sat at 3.5 and it carries every hint,
+     micro-label and timestamp in the app. */
+  --dim: #847da3;
+  --on-accent: #ffffff;
+
+  /* A hair darker than the original #7c5cff so white text in your own chat
+     bubble clears 4.5:1 (it was 4.3). Indistinguishable side by side. */
+  --accent: #7455f5;
+  --accent-hi: #8d70ff;
+  --accent-lo: #5b41cc;
+  --accent-glow: rgba(116, 85, 245, 0.3);
+  --accent-soft: rgba(116, 85, 245, 0.1);
+
+  --ember: #ff8a5b;
+  --ember-dim: #c96a45;
+  /* Stage directions inside your own bubble sit on the accent fill, so this
+     has to stay warm without dropping under AA — #ffd9c7 was 3.3:1. */
+  --ember-soft: #fff8f4;
+  --ember-tint: rgba(255, 138, 91, 0.1);
+  --ember-line: rgba(255, 138, 91, 0.24);
+
+  --danger: #ff6b6b;
+  --danger-text: #ffc4c4;
+  --danger-tint: rgba(255, 107, 107, 0.09);
+  --danger-line: rgba(255, 107, 107, 0.35);
+
+  --ok: #4ade80;
+  --ok-text: #b9f2cf;
+  --ok-tint: rgba(74, 222, 128, 0.08);
+  --ok-line: rgba(74, 222, 128, 0.3);
+
+  --shadow-lg: 0 24px 60px -24px rgba(0, 0, 0, 0.8);
+  --shadow-md: 0 14px 34px -14px rgba(0, 0, 0, 0.8);
+
+  --aurora-a: rgba(116, 85, 245, 0.16);
+  --aurora-b: rgba(255, 138, 91, 0.1);
+  --stage-glow: rgba(116, 85, 245, 0.08);
+}
+
+/* Warm paper. The one light theme, so the ink has to be genuinely dark and
+   the two accents genuinely saturated or the whole thing goes to mush. */
+:root[data-theme='ivory'] {
+  color-scheme: light;
+
+  --void: #f6f1e8;
+  --slab: #fffdf8;
+  --slab-2: #efe8dc;
+  --slab-3: #e2d9c9;
+  --line: #d5cab5;
+  --line-soft: #e7dfd0;
+
+  --overlay: rgba(255, 253, 248, 0.82);
+  --scrim: rgba(58, 47, 30, 0.4);
+
+  --text: #221f1a;
+  --muted: #5b5346;
+  --dim: #756c5c;
+  --on-accent: #ffffff;
+
+  --accent: #5b3fd6;
+  --accent-hi: #6d52e6;
+  --accent-lo: #472fb0;
+  --accent-glow: rgba(91, 63, 214, 0.22);
+  --accent-soft: rgba(91, 63, 214, 0.08);
+
+  --ember: #a8430f;
+  --ember-dim: #7f3410;
+  --ember-soft: #ffe4d3;
+  --ember-tint: rgba(168, 67, 15, 0.09);
+  --ember-line: rgba(168, 67, 15, 0.28);
+
+  --danger: #b3241c;
+  --danger-text: #8c1a14;
+  --danger-tint: rgba(179, 36, 28, 0.08);
+  --danger-line: rgba(179, 36, 28, 0.32);
+
+  --ok: #1c7a44;
+  --ok-text: #155c33;
+  --ok-tint: rgba(28, 122, 68, 0.09);
+  --ok-line: rgba(28, 122, 68, 0.3);
+
+  --shadow-lg: 0 24px 60px -26px rgba(70, 55, 30, 0.34);
+  --shadow-md: 0 14px 34px -16px rgba(70, 55, 30, 0.3);
+
+  --aurora-a: rgba(91, 63, 214, 0.11);
+  --aurora-b: rgba(168, 67, 15, 0.08);
+  --stage-glow: rgba(91, 63, 214, 0.06);
+}
+
+/* Near-black with a red heart. Amber carries the stage directions so the
+   red keeps its one job. */
+:root[data-theme='blood'] {
+  color-scheme: dark;
+
+  --void: #0b0406;
+  --slab: #160a0d;
+  --slab-2: #1e0f13;
+  --slab-3: #2b171b;
+  --line: #3e2026;
+  --line-soft: #2a1317;
+
+  --overlay: rgba(22, 10, 13, 0.78);
+  --scrim: rgba(8, 3, 4, 0.76);
+
+  --text: #f7e9e9;
+  --muted: #c9a6a9;
+  --dim: #97747a;
+  --on-accent: #ffffff;
+
+  --accent: #c62828;
+  --accent-hi: #d83a3a;
+  --accent-lo: #8e1c1c;
+  --accent-glow: rgba(198, 40, 40, 0.32);
+  --accent-soft: rgba(198, 40, 40, 0.11);
+
+  --ember: #ffab5b;
+  --ember-dim: #c9814a;
+  --ember-soft: #ffe4cd;
+  --ember-tint: rgba(255, 171, 91, 0.1);
+  --ember-line: rgba(255, 171, 91, 0.26);
+
+  --danger: #ff8080;
+  --danger-text: #ffcccc;
+  --danger-tint: rgba(255, 128, 128, 0.11);
+  --danger-line: rgba(255, 128, 128, 0.38);
+
+  --ok: #5ad68a;
+  --ok-text: #c2f2d5;
+  --ok-tint: rgba(90, 214, 138, 0.09);
+  --ok-line: rgba(90, 214, 138, 0.3);
+
+  --shadow-lg: 0 24px 60px -24px rgba(0, 0, 0, 0.86);
+  --shadow-md: 0 14px 34px -14px rgba(0, 0, 0, 0.86);
+
+  --aurora-a: rgba(198, 40, 40, 0.2);
+  --aurora-b: rgba(255, 171, 91, 0.08);
+  --stage-glow: rgba(198, 40, 40, 0.09);
+}
+
+/* Deep water. Cyan reads as the second voice without ever competing with
+   the navy blue of the primary. */
+:root[data-theme='blue'] {
+  color-scheme: dark;
+
+  --void: #060d18;
+  --slab: #0d1626;
+  --slab-2: #132033;
+  --slab-3: #1d2c44;
+  --line: #26394f;
+  --line-soft: #182637;
+
+  --overlay: rgba(13, 22, 38, 0.78);
+  --scrim: rgba(3, 8, 16, 0.76);
+
+  --text: #e7f1fb;
+  --muted: #a3b9d1;
+  --dim: #718da9;
+  --on-accent: #ffffff;
+
+  --accent: #2069c0;
+  --accent-hi: #2f7ed6;
+  --accent-lo: #164b8c;
+  --accent-glow: rgba(32, 105, 192, 0.34);
+  --accent-soft: rgba(32, 105, 192, 0.13);
+
+  --ember: #5ad2c4;
+  --ember-dim: #3d9b91;
+  --ember-soft: #d3f4ef;
+  --ember-tint: rgba(90, 210, 196, 0.1);
+  --ember-line: rgba(90, 210, 196, 0.26);
+
+  --danger: #ff8080;
+  --danger-text: #ffcccc;
+  --danger-tint: rgba(255, 128, 128, 0.1);
+  --danger-line: rgba(255, 128, 128, 0.36);
+
+  --ok: #57d98c;
+  --ok-text: #bff2d4;
+  --ok-tint: rgba(87, 217, 140, 0.09);
+  --ok-line: rgba(87, 217, 140, 0.3);
+
+  --shadow-lg: 0 24px 60px -24px rgba(0, 0, 0, 0.82);
+  --shadow-md: 0 14px 34px -14px rgba(0, 0, 0, 0.82);
+
+  --aurora-a: rgba(32, 105, 192, 0.22);
+  --aurora-b: rgba(90, 210, 196, 0.09);
+  --stage-glow: rgba(32, 105, 192, 0.1);
+}
+
+/* Moss on charcoal. Ochre for the stage directions — warm enough to lift
+   off the green without shouting. */
+:root[data-theme='forest'] {
+  color-scheme: dark;
+
+  --void: #0a0f0c;
+  --slab: #121a14;
+  --slab-2: #19231c;
+  --slab-3: #243026;
+  --line: #2d3b31;
+  --line-soft: #1f2a22;
+
+  --overlay: rgba(18, 26, 20, 0.78);
+  --scrim: rgba(5, 9, 6, 0.76);
+
+  --text: #eaf1ea;
+  --muted: #a8baab;
+  --dim: #758a78;
+  --on-accent: #ffffff;
+
+  --accent: #237a42;
+  --accent-hi: #2c9152;
+  --accent-lo: #185c31;
+  --accent-glow: rgba(35, 122, 66, 0.34);
+  --accent-soft: rgba(35, 122, 66, 0.13);
+
+  --ember: #e0b055;
+  --ember-dim: #a8823c;
+  --ember-soft: #fbf1d9;
+  --ember-tint: rgba(224, 176, 85, 0.1);
+  --ember-line: rgba(224, 176, 85, 0.26);
+
+  --danger: #f08080;
+  --danger-text: #ffcccc;
+  --danger-tint: rgba(240, 128, 128, 0.1);
+  --danger-line: rgba(240, 128, 128, 0.36);
+
+  --ok: #6cd88f;
+  --ok-text: #c6f2d5;
+  --ok-tint: rgba(108, 216, 143, 0.09);
+  --ok-line: rgba(108, 216, 143, 0.3);
+
+  --shadow-lg: 0 24px 60px -24px rgba(0, 0, 0, 0.82);
+  --shadow-md: 0 14px 34px -14px rgba(0, 0, 0, 0.82);
+
+  --aurora-a: rgba(35, 122, 66, 0.22);
+  --aurora-b: rgba(224, 176, 85, 0.08);
+  --stage-glow: rgba(35, 122, 66, 0.1);
+}
+
+/* ── shape + type tokens (theme-independent) ─────────────────────── */
+
+:root {
+  --on-disc: #ffffff;
+
+  /* Preview chips in the settings theme picker have to render a theme the
+     page is NOT wearing, so those five palettes live here as tokens rather
+     than as hexes buried in a component rule. */
+  --preview-dark-bg: #14121f;
+  --preview-dark-dot: #7c5cff;
+  --preview-ivory-bg: #f6f1e8;
+  --preview-ivory-dot: #5b3fd6;
+  --preview-blood-bg: #160a0d;
+  --preview-blood-dot: #c62828;
+  --preview-blue-bg: #0d1626;
+  --preview-blue-dot: #2069c0;
+  --preview-forest-bg: #121a14;
+  --preview-forest-dot: #237a42;
+
+  --display: 'Syne', 'Trebuchet MS', sans-serif;
+  --body: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+
+  --r-sm: 10px;
+  --r: 14px;
+  --r-lg: 20px;
+  --r-full: 999px;
+
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* The UA rule for [hidden] is display:none at the lowest specificity, so any
+   class that sets a display value silently defeats it. This app toggles
+   visibility with the hidden attribute throughout, so make it win. */
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--void);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ember);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+/* ── scrollbars ─────────────────────────────────────────────────── */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: var(--r-full);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--slab-3);
+}
+
+/* ── shared controls ────────────────────────────────────────────── */
+
+.field {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.field > label,
+.field-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 7px;
+}
+
+.input,
+.textarea,
+.select {
+  width: 100%;
+  background: var(--void);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  color: var(--text);
+  padding: 11px 13px;
+  outline: none;
+  transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--dim);
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 92px;
+  line-height: 1.6;
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--dim);
+  margin-top: 6px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border-radius: var(--r-sm);
+  font-weight: 500;
+  border: 1px solid transparent;
+  transition: background 0.15s var(--ease), border-color 0.15s var(--ease),
+    color 0.15s var(--ease), transform 0.08s var(--ease);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.btn-primary:hover {
+  background: var(--accent-hi);
+}
+
+.btn-primary[disabled] {
+  background: var(--slab-3);
+  color: var(--dim);
+  cursor: not-allowed;
+}
+
+.btn-ghost {
+  border-color: var(--line);
+  color: var(--muted);
+}
+
+.btn-ghost:hover {
+  border-color: var(--dim);
+  color: var(--text);
+}
+
+.btn-ghost[disabled] {
+  color: var(--dim);
+  cursor: not-allowed;
+}
+
+.btn-danger {
+  border-color: var(--line);
+  color: var(--danger);
+}
+
+.btn-danger:hover {
+  border-color: var(--danger);
+  background: var(--danger-tint);
+}
+
+.btn-compact {
+  padding: 8px 13px;
+  font-size: 13px;
+  border-radius: 9px;
+}
+
+.link-btn {
+  font-size: 12px;
+  color: var(--dim);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--line);
+  transition: color 0.14s var(--ease);
+}
+
+.link-btn:hover {
+  color: var(--ember);
+  text-decoration-color: currentColor;
+}
+
+.link-btn-inline {
+  font-size: inherit;
+  color: inherit;
+  font-weight: 600;
+}
+
+/* ── notice strip (errors, confirmations, warnings) ──────────────── */
+
+.notice {
+  display: none;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  padding: 10px 13px;
+  border-radius: var(--r-sm);
+  border: 1px solid;
+  margin-bottom: 14px;
+}
+
+.notice.show {
+  display: flex;
+}
+
+.notice-error {
+  color: var(--danger-text);
+  border-color: var(--danger-line);
+  background: var(--danger-tint);
+}
+
+.notice-ok {
+  color: var(--ok-text);
+  border-color: var(--ok-line);
+  background: var(--ok-tint);
+}
+
+.notice-warn {
+  color: var(--ember);
+  border-color: var(--ember-line);
+  background: var(--ember-tint);
+}
+
+/* ── avatar disc (login tiles, admin rows, your own bubble) ──────── */
+
+/* --disc-accent is written per element from JS with that person's colour.
+   A custom property, not an inline style attribute — the CSP allows it. */
+.disc {
+  --disc-accent: var(--accent);
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.28), transparent 58%),
+    var(--disc-accent);
+  box-shadow: 0 8px 22px -10px var(--disc-accent);
+  user-select: none;
+  flex-shrink: 0;
+  transition: box-shadow 0.16s var(--ease);
+}
+
+.disc-lg { width: 96px; height: 96px; }
+.disc-sm { width: 40px; height: 40px; }
+
+.disc-initial {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 32px;
+  line-height: 1;
+  /* The discs are always a saturated accent, so white is the reliable
+     foreground here in every theme. */
+  color: var(--on-disc);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.disc-lg .disc-initial { font-size: 40px; }
+.disc-sm .disc-initial { font-size: 17px; }
+
+/* ── icon button ────────────────────────────────────────────────── */
+
+.icon-btn {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  color: var(--muted);
+  transition: background 0.14s var(--ease), color 0.14s var(--ease);
+}
+
+.icon-btn:hover {
+  background: var(--slab-3);
+  color: var(--text);
+}
+
+.icon-btn[disabled] {
+  color: var(--line);
+  cursor: not-allowed;
+}
+
+.icon-btn[disabled]:hover {
+  background: none;
+  color: var(--line);
+}
+
+.icon-btn svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── toast ──────────────────────────────────────────────────────── */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translate(-50%, 16px);
+  z-index: 90;
+  padding: 11px 17px;
+  border-radius: var(--r-full);
+  background: var(--slab-3);
+  border: 1px solid var(--line);
+  font-size: 13.5px;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.toast.bad {
+  border-color: var(--danger-line);
+  color: var(--danger-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
