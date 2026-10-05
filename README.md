@@ -1,4 +1,17 @@
-# Ashley AI
+<div align="center">
+
+<img src="assets/ashley-mark.svg" alt="Ashley" width="72">
+
+# Ashley
+
+**A protective pathway for parents whose kids want AI.**
+
+[![License: AGPL-3.0-or-later](https://img.shields.io/badge/license-AGPL--3.0--or--later-blue)](LICENSE)
+[![brought to you by Volenti](https://img.shields.io/badge/brought_to_you_by-Volenti-ff8a5b)](https://volenti.ca)
+
+</div>
+
+---
 
 A self-hosted character-chat app for children and teens, where the **child owns the
 characters** and a **parent owns the safety layer**.
