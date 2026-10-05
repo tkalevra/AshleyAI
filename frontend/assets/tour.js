@@ -40,7 +40,7 @@
        three steps therefore open the first person's rules, and are
        skipped entirely when no accounts exist yet.
 
-   Ashley AI — Copyright (C) 2026 Christopher Thompson. AGPL-3.0-or-later.
+   Ashley AI — AGPL-3.0-or-later. Copyright and license: see the LICENSE file.
    ------------------------------------------------------------------- */
 
 (function () {

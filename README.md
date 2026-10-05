@@ -1,4 +1,17 @@
-# Ashley AI
+<div align="center">
+
+<img src="assets/ashley-mark.svg" alt="Ashley" width="72">
+
+# Ashley
+
+**A protective pathway for parents whose kids want AI.**
+
+[![License: AGPL-3.0-or-later](https://img.shields.io/badge/license-AGPL--3.0--or--later-blue)](LICENSE)
+[![brought to you by Volenti](https://img.shields.io/badge/brought_to_you_by-Volenti-ff8a5b)](https://volenti.ca)
+
+</div>
+
+---
 
 A self-hosted character-chat app for children and teens, where the **child owns the
 characters** and a **parent owns the safety layer**.
@@ -14,7 +27,7 @@ Ollama, LM Studio, or anything else that speaks the OpenAI chat-completions API.
 leaves the network. There is no account, no telemetry, no vendor, and no third party who
 gets to read a child's conversations.
 
-An open-source project by **Christopher Thompson**, published under **Volenti**.
+An open-source project published under **Volenti**.
 Licensed **AGPL-3.0-or-later**.
 
 ---
@@ -224,7 +237,7 @@ safety in [docs/safety-model.md](docs/safety-model.md), single-worker/LAN-scope 
 
 ## Licence
 
-Copyright (C) 2026 Christopher Thompson.
+Copyright (C) 2026, held by the author.
 
 Ashley AI is free software: you can redistribute it and/or modify it under the terms of the
 **GNU Affero General Public License, version 3 or later**, as published by the Free Software
@@ -239,6 +252,6 @@ Fonts (Syne, Space Grotesk) are bundled under the SIL Open Font License 1.1 — 
 `frontend/assets/fonts/OFL.txt`. The pipeline runs inside the Open WebUI `pipelines`
 container image, which is licensed separately by its authors.
 
-**Copyright is held personally by Christopher Thompson. Volenti is the outfit it is
+**Copyright is held personally by the author. Volenti is the outfit it is
 published under — a brand association, not an assignment of ownership.** Do not attribute
 copyright in this project to Volenti.

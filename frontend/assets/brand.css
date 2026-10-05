@@ -22,8 +22,8 @@
    and uses the classes below. See the end of this file for the markup
    each block expects.
 
-   Ashley AI -- Copyright (C) 2026 Christopher Thompson. AGPL-3.0-or-later.
-   Published under Volenti. Volenti is the outfit, not the copyright
+   Ashley AI -- AGPL-3.0-or-later. Copyright and license: see the LICENSE
+   file. Published under Volenti. Volenti is the outfit, not the copyright
    holder; keep those two separate wherever both appear.
    ------------------------------------------------------------------ */
 
@@ -200,14 +200,12 @@
        <span class="brand-wordmark-sub">AI</span>
      </span>
 
-   Footer credit -- note that the two names carry different claims and the
-   wording must keep them apart:
+   Footer credit:
 
      <footer class="brand-credit brand-credit-ruled">
        <span class="brand-credit-line">
-         Ashley AI &middot; an open-source project by
-         <span class="brand-credit-holder">Christopher Thompson</span>,
-         published under <span class="brand-credit-org">Volenti</span>.
+         Ashley, brought to you by <a class="brand-credit-org"
+         href="https://volenti.ca">Volenti</a>
        </span>
        <span class="brand-credit-sep" aria-hidden="true"></span>
        <span class="brand-credit-line">

@@ -161,14 +161,14 @@ jobs:
         run: |
           set -uo pipefail
           # Volenti is the outfit Ashley is published under. Copyright is held
-          # personally by Christopher Thompson. These two must never be conflated.
+          # personally by the author. These two must never be conflated.
           # Matches an actual attribution line -- a copyright marker followed only
           # by a year and the brand name -- not prose that mentions both words.
           if grep -rnEIi '(©|\(c\)|copyright)[[:space:]]*(\(c\)|©)?[[:space:]]*[0-9,[:space:]-]*volenti' \
                --include='*.md' --include='*.py' --include='*.css' \
                --include='*.js' --include='*.html' --include='*.yml' \
                --include='AUTHORS' . ; then
-            echo "::error::copyright attributed to Volenti. It is held by Christopher Thompson."
+            echo "::error::copyright attributed to Volenti. It is held by the author."
             exit 1
           fi
           echo "ok: copyright attribution is correct"
