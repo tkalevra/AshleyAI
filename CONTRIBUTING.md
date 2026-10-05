@@ -140,7 +140,7 @@ health check proves a process is running and nothing else.
 
 ## Licence of contributions
 
-Ashley is **AGPL-3.0-or-later**, copyright held personally by **Christopher Thompson**. By
+Ashley is **AGPL-3.0-or-later**, copyright held personally by the author. By
 submitting a contribution you agree it is licensed under those terms and that you have the
 right to submit it. Contributors keep copyright in their own contributions and are listed in
 [AUTHORS](AUTHORS).

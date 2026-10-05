@@ -30,7 +30,7 @@
    No inline handlers, no innerHTML: the CSP has no 'unsafe-inline', and
    nothing that came from a person is ever parsed as markup.
 
-   Ashley AI — Copyright (C) 2026 Christopher Thompson. AGPL-3.0-or-later.
+   Ashley AI — AGPL-3.0-or-later. Copyright and license: see the LICENSE file.
    ------------------------------------------------------------------- */
 
 (function () {

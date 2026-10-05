@@ -10,7 +10,7 @@ and start the stack for you.
 Safe to re-run. It reads any existing .env and offers those values as defaults,
 so it doubles as a reconfigure tool. Nothing is written until you confirm.
 
-Copyright (C) 2026 Christopher Thompson
+Copyright (C) 2026, held by the author.
 Licensed under the GNU Affero General Public License v3.0 or later.
 """
 

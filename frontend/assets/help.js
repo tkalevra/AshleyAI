@@ -12,7 +12,7 @@
    about the same feature, they are quoting one sentence, not two copies
    of it that will drift.
 
-   Ashley AI — Copyright (C) 2026 Christopher Thompson. AGPL-3.0-or-later.
+   Ashley AI — AGPL-3.0-or-later. Copyright and license: see the LICENSE file.
    ------------------------------------------------------------------- */
 
 (function () {

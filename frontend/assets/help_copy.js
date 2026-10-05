@@ -17,7 +17,7 @@
    Written to be read by a parent, not a developer: short sentences, no
    jargon, no exclamation marks, and no promises the software cannot keep.
 
-   Ashley AI — Copyright (C) 2026 Christopher Thompson. AGPL-3.0-or-later.
+   Ashley AI — AGPL-3.0-or-later. Copyright and license: see the LICENSE file.
    Published under Volenti.
    ------------------------------------------------------------------- */
 
